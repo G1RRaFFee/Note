@@ -1,14 +1,9 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from './guards/auth.guard';
-import { Request } from 'express';
+import { Controller, Get } from '@nestjs/common';
 
-@UseGuards(AuthGuard)
 @Controller()
 export class AppController {
-  @Get('contacts')
-  someProtectedRoute(@Req() request: Request) {
-    return {
-      message: 'contacts',
-    };
+  @Get('hello')
+  public getHello() {
+    return 'hello';
   }
 }

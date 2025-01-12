@@ -8,14 +8,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseModule = void 0;
 const common_1 = require("@nestjs/common");
-const prisma_service_1 = require("./prisma.service");
+const user_repository_1 = require("./postgres/repositories/user.repository");
+const prisma_module_1 = require("../services/prisma/prisma.module");
 let DatabaseModule = class DatabaseModule {
 };
 exports.DatabaseModule = DatabaseModule;
 exports.DatabaseModule = DatabaseModule = __decorate([
     (0, common_1.Module)({
-        providers: [prisma_service_1.PrismaService],
-        exports: [prisma_service_1.PrismaService],
+        imports: [prisma_module_1.PrismaModule],
+        providers: [user_repository_1.PostgresUserRepository],
+        exports: [user_repository_1.PostgresUserRepository],
     })
 ], DatabaseModule);
 //# sourceMappingURL=database.module.js.map

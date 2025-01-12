@@ -1,0 +1,15 @@
+model Contact {
+    id            Int             @id @default(autoincrement())
+    name          String
+    note          Note?           @relation("ContactToNote", fields: [noteId], references: [id])
+    noteId        Int?            @unique
+    avatar        String
+    createdAt     DateTime        @default(now())
+    updatedAt     DateTime        @updatedAt
+    userId        Int
+    user          User            @relation(fields: [userId], references: [id])
+    folders       Folder[]        @relation("ContactFolders")
+    ContactFolder ContactFolder[]
+
+    @@map("contacts")
+}
