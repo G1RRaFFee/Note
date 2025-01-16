@@ -3,7 +3,7 @@ model Contact {
     name          String
     note          Note?           @relation("ContactToNote", fields: [noteId], references: [id])
     noteId        Int?            @unique
-    avatar        String
+    avatarUrl     String?
     createdAt     DateTime        @default(now())
     updatedAt     DateTime        @updatedAt
     userId        Int

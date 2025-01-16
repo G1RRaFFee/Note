@@ -1,10 +1,26 @@
+import {
+  IsDateString,
+  IsEmail,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
+
 export class UpdateContactDto {
-  constructor(
-    readonly name: string,
-    readonly avatar?: string,
-    readonly email?: string,
-    readonly phone?: string,
-    readonly birthday?: string,
-    readonly address?: string,
-  ) {}
+  @IsString()
+  readonly name: string;
+
+  @IsString()
+  readonly avatarUrl?: string;
+
+  @IsEmail()
+  readonly email?: string;
+
+  @IsPhoneNumber()
+  readonly phone?: string;
+
+  @IsDateString()
+  readonly birthday?: string;
+
+  @IsString()
+  readonly address?: string;
 }

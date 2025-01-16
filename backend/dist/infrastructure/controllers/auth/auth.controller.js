@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const auth_service_1 = require("../../services/auth/auth.service");
 const signup_dto_1 = require("../../../core/repositories/auth/dto/signup.dto");
 const signin_dto_1 = require("../../../core/repositories/auth/dto/signin.dto");
-const refresh_dto_1 = require("../../../core/repositories/auth/dto/refresh.dto");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -33,11 +32,17 @@ let AuthController = class AuthController {
         });
         return { accessToken };
     }
-    async refreshToken(refreshTokenDto, response) {
-        const { accessToken, refreshToken } = await this.authService.refreshTokens(refreshTokenDto.refreshToken);
+    async refreshToken(request, response) {
+        console.log('Все cookie: ', request.cookies);
+        if (!request.cookies['refreshToken']) {
+            throw new common_1.UnauthorizedException('Refresh Token is missing');
+        }
+        const { accessToken, refreshToken } = await this.authService.refreshTokens(request.cookies['refreshToken']);
         response.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             maxAge: 7 * 30 * 24 * 60 * 60 * 1000,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'none',
         });
         return { accessToken };
     }
@@ -67,10 +72,10 @@ __decorate([
 ], AuthController.prototype, "signIn", null);
 __decorate([
     (0, common_1.Post)('refresh'),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [refresh_dto_1.RefreshTokenDto, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "refreshToken", null);
 __decorate([

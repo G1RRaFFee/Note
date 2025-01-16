@@ -14,7 +14,6 @@ const common_1 = require("@nestjs/common");
 const user_service_1 = require("../../../core/services/user.service");
 const bcrypt_1 = require("bcrypt");
 const jwt_1 = require("@nestjs/jwt");
-const uuid_1 = require("uuid");
 const prisma_service_1 = require("../prisma/prisma.service");
 let AuthService = class AuthService {
     constructor(prismaService, userService, jwtService) {
@@ -45,7 +44,10 @@ let AuthService = class AuthService {
             expiresIn: process.env.JWT_EXPIRATION_TIME,
             secret: process.env.JWT_SECRET,
         });
-        const refreshToken = (0, uuid_1.v4)();
+        const refreshToken = this.jwtService.sign({ id: userId }, {
+            expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+            secret: process.env.JWT_REFRESH_TOKEN_SECRET,
+        });
         await this.saveRefreshToken(userId, refreshToken);
         return {
             accessToken,

@@ -58,7 +58,14 @@ export class AuthService {
         secret: process.env.JWT_SECRET,
       },
     );
-    const refreshToken = uuidv4();
+    const refreshToken = this.jwtService.sign(
+      { id: userId },
+      {
+        expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+        secret: process.env.JWT_REFRESH_TOKEN_SECRET,
+      },
+    );
+
     await this.saveRefreshToken(userId, refreshToken);
     return {
       accessToken,

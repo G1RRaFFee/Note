@@ -10,6 +10,8 @@ exports.ServiceModule = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
 const user_repository_1 = require("../../infrastructure/database/postgres/repositories/user.repository");
+const contact_service_1 = require("./contact.service");
+const contact_repository_1 = require("../../infrastructure/database/postgres/repositories/contact.repository");
 let ServiceModule = class ServiceModule {
 };
 exports.ServiceModule = ServiceModule;
@@ -21,8 +23,13 @@ exports.ServiceModule = ServiceModule = __decorate([
                 provide: 'UserRepository',
                 useClass: user_repository_1.PostgresUserRepository,
             },
+            contact_service_1.ContactService,
+            {
+                provide: 'ContactRepository',
+                useClass: contact_repository_1.PostgresContactRepository,
+            },
         ],
-        exports: [user_service_1.UserService],
+        exports: [user_service_1.UserService, contact_service_1.ContactService],
     })
 ], ServiceModule);
 //# sourceMappingURL=service.module.js.map

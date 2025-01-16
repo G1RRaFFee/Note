@@ -1,21 +1,23 @@
-import api from "@/http";
-import { AuthResponse } from "@/models/response/auth.response";
+import api from "@/api/axios.config";
 import { AxiosResponse } from "axios";
+
+import SignIn from "@/interface/auth/signin.interface";
+import SignUp from "@/interface/auth/signup.interface";
 
 export default class AuthService {
   public static async signIn(
     email: string,
     password: string
-  ): Promise<AxiosResponse<AuthResponse>> {
-    return api.post<AuthResponse>("/auth/signin", { email, password });
+  ): Promise<AxiosResponse<SignIn>> {
+    return api.post<SignIn>("/auth/signin", { email, password });
   }
 
   public static async signUp(
     username: string,
     email: string,
     password: string
-  ): Promise<any> {
-    return api.post("/auth/signup", { username, email, password });
+  ): Promise<AxiosResponse<SignUp>> {
+    return api.post<SignUp>("/auth/signup", { username, email, password });
   }
 
   public static async logout(): Promise<void> {

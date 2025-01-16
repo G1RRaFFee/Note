@@ -24,9 +24,9 @@ export declare class AuthService {
     }>;
     logout(refreshToken: string): Promise<{
         id: number;
+        createdAt: Date;
         token: string;
         expiresAt: Date;
-        createdAt: Date;
         userId: number;
     }>;
 }

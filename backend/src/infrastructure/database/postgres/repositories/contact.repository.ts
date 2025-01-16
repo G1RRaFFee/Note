@@ -1,48 +1,54 @@
-// // TODO: Переписать с использованием Mapper
-// import { Injectable } from '@nestjs/common';
-// import { ContactRepository } from 'src/core/repositories/ContactRepository/contact.repository';
-// import { PrismaService } from '../../prisma.service';
-// import { Contact } from 'src/core/entities/contact.entity';
-// import { Prisma } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
 
-// @Injectable()
-// export class PostgresContactRepository implements ContactRepository {
-//   constructor(private readonly prisma: PrismaService) {}
+import { Contact } from 'src/core/entities/contact.entity';
+import { ContactRepository } from 'src/core/repositories/contact/contact.repository';
+import { CreateContactDto } from 'src/core/repositories/contact/dto/createContactDto';
+import { UpdateContactDto } from 'src/core/repositories/contact/dto/updateContactDto';
+import { PrismaService } from 'src/infrastructure/services/prisma/prisma.service';
 
-//   async getById(id: number): Promise<Contact | null> {
-//     const foundContact = await this.prisma.contact.findUnique({
-//       where: {
-//         id: id,
-//       },
-//     });
-//     return foundContact;
-//   }
+@Injectable()
+export class PostgresContactRepository implements ContactRepository {
+  public constructor(private readonly prismaService: PrismaService) {}
 
-//   async getAll(): Promise<Contact[]> {
-//     const contacts = await this.prisma.contact.findMany();
-//     return contacts;
-//   }
+  public async getContactById(id: number): Promise<Contact | null> {
+    const foundContact = await this.prismaService.contact.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    return foundContact;
+  }
 
-//   async remove(id: number): Promise<Contact> {
-//     const deletedContact = await this.prisma.contact.delete({
-//       where: { id: id },
-//     });
-//     return deletedContact;
-//   }
+  public async getAllContacts(): Promise<Contact[]> {
+    const contacts = await this.prismaService.contact.findMany();
+    return contacts;
+  }
 
-//   async update(id: number, dto: Prisma.ContactUpdateInput): Promise<Contact> {
-//     const updatedContact = await this.prisma.contact.update({
-//       where: { id: id },
-//       data: dto,
-//     });
-//     return updatedContact;
-//   }
+  public async removeContact(id: number): Promise<Contact> {
+    const deletedContact = await this.prismaService.contact.delete({
+      where: { id: id },
+    });
+    return deletedContact;
+  }
 
-//   async create(dto: Prisma.ContactCreateInput): Promise<Contact> {
-//     const newContact = await this.prisma.contact.create({
-//       data: dto,
-//     });
+  public async updateContact(
+    id: number,
+    updateContactDto: UpdateContactDto,
+  ): Promise<Contact> {
+    const updatedContact = await this.prismaService.contact.update({
+      where: { id: id },
+      data: updateContactDto,
+    });
+    return updatedContact;
+  }
 
-//     return newContact;
-//   }
-// }
+  public async createContact(
+    createContactDto: CreateContactDto,
+  ): Promise<Contact> {
+    const newContact = await this.prismaService.contact.create({
+      data: createContactDto,
+    });
+
+    return newContact;
+  }
+}

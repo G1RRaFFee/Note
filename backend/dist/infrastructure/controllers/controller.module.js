@@ -17,6 +17,7 @@ exports.ControllersModule = ControllersModule = __decorate([
     (0, common_1.Module)({
         imports: [],
         controllers: [contact_controller_1.ContactController, auth_controller_1.AuthController],
+        exports: [],
     })
 ], ControllersModule);
 //# sourceMappingURL=controller.module.js.map

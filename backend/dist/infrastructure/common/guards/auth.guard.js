@@ -23,7 +23,7 @@ let AuthGuard = class AuthGuard {
             throw new common_1.UnauthorizedException();
         }
         try {
-            const payload = this.jwtService.verifyAsync(token, {
+            const payload = await this.jwtService.verifyAsync(token, {
                 secret: process.env.JWT_SECRET,
             });
             request['user'] = payload;

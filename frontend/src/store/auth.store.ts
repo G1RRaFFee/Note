@@ -1,14 +1,19 @@
+import { API_URL } from "@/api/axios.config";
+import SignIn from "@/interface/auth/signin.interface";
+import User from "@/interface/user/user.interface";
 import AuthService from "@/services/auth.service";
+import axios from "axios";
 import { create } from "zustand";
 
 interface AuthState {
-  user: any;
+  user: User | null;
   isAuthenticated: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<SignIn>;
   signUp: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   setAuth: (isAuthenticated: boolean) => void;
-  setUser: (user: any) => void;
+  setUser: (user: User) => void;
+  checkAuth: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -17,10 +22,11 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   signIn: async (email, password) => {
     try {
-      const response = await AuthService.signIn(email, password);
-      console.log("SignIn: ", response);
-      localStorage.setItem("token", response.data.accessToken);
+      const { data } = await AuthService.signIn(email, password);
+      console.log("SignIn response: ", data);
+      localStorage.setItem("token", data.accessToken);
       set({ isAuthenticated: true });
+      return data;
     } catch (error) {
       console.error("SignIn Error:", error);
       set({ isAuthenticated: false });
@@ -30,8 +36,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   signUp: async (username, email, password) => {
     try {
       const response = await AuthService.signUp(username, email, password);
-      console.log("SignUp: ", response);
-      localStorage.setItem("token", response.data.accessToken);
+      console.log(response);
       set({ user: response.data, isAuthenticated: true });
     } catch (error) {
       console.error("SignIn Error:", error);
@@ -56,5 +61,22 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   setAuth: (isAuthenticated) => {
     set({ isAuthenticated });
+  },
+
+  checkAuth: async () => {
+    try {
+      const { data } = await axios.post<{ accessToken: string }>(
+        `${API_URL}/auth/refresh`,
+        {},
+        { withCredentials: true }
+      );
+
+      console.log("api/auth/refresh response: ", data.accessToken);
+
+      localStorage.setItem("token", data.accessToken);
+      set({ isAuthenticated: true });
+    } catch (error) {
+      console.log(error);
+    }
   },
 }));
