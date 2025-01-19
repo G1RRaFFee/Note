@@ -4,7 +4,7 @@ import { UpdateContactDto } from './dto/updateContactDto';
 
 export interface ContactRepository {
   createContact(createContactDto: CreateContactDto): Promise<Contact>;
-  getContactById(id: number): Promise<Contact>;
+  getContactById(id: number): Promise<Contact | null>;
   getAllContacts(): Promise<Contact[]>;
   removeContact(id: number): Promise<Contact>;
   updateContact(

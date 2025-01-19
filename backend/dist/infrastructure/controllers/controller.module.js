@@ -10,13 +10,14 @@ exports.ControllersModule = void 0;
 const common_1 = require("@nestjs/common");
 const auth_controller_1 = require("./auth/auth.controller");
 const contact_controller_1 = require("./contact/contact.controller");
+const file_controller_1 = require("./file/file.controller");
 let ControllersModule = class ControllersModule {
 };
 exports.ControllersModule = ControllersModule;
 exports.ControllersModule = ControllersModule = __decorate([
     (0, common_1.Module)({
         imports: [],
-        controllers: [contact_controller_1.ContactController, auth_controller_1.AuthController],
+        controllers: [contact_controller_1.ContactController, auth_controller_1.AuthController, file_controller_1.FileController],
         exports: [],
     })
 ], ControllersModule);

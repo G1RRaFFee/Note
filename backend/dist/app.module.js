@@ -9,15 +9,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
 const auth_module_1 = require("./infrastructure/services/auth/auth.module");
-const service_module_1 = require("./core/services/service.module");
 const contact_controller_1 = require("./infrastructure/controllers/contact/contact.controller");
+const service_module_1 = require("./core/services/service.module");
+const file_controller_1 = require("./infrastructure/controllers/file/file.controller");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, '..', 'uploads'),
+            }),
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
                 envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
@@ -25,7 +31,7 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             service_module_1.ServiceModule,
         ],
-        controllers: [contact_controller_1.ContactController],
+        controllers: [contact_controller_1.ContactController, file_controller_1.FileController],
         providers: [],
     })
 ], AppModule);

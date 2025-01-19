@@ -1,0 +1,1 @@
+export declare const FILE_SIZE: number;

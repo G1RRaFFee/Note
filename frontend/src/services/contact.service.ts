@@ -8,7 +8,7 @@ export interface Contact {
   readonly updatedAt: Date;
   readonly folderID: number[];
   readonly noteID: number;
-  readonly avatar: string;
+  readonly avatarUrl: string;
   readonly phone: string;
   readonly birthday: string;
   readonly address: string;
@@ -17,11 +17,11 @@ export interface Contact {
 export default class ContactService {
   public static async getAllContacts(): Promise<AxiosResponse<Contact[]>> {
     try {
-      const responce = await apiClient.get<Contact[]>("/contacts", {
+      const response = await apiClient.get<Contact[]>("/contacts", {
         withCredentials: true,
       });
 
-      return responce;
+      return response;
     } catch (error) {
       console.log("Error fetching contacts:", error);
       throw error;
@@ -38,6 +38,34 @@ export default class ContactService {
       return responce;
     } catch (error) {
       console.log("Error fetching contactById:", error);
+      throw error;
+    }
+  }
+
+  public static async createContact(data: FormData) {
+    if (!data) {
+      throw Error("Нет данных для отправления");
+    }
+    try {
+      const response = await apiClient.post("/contacts", data, {
+        withCredentials: true,
+      });
+      return response;
+    } catch (error) {
+      console.log("Error fetching createContact:", error);
+      throw error;
+    }
+  }
+
+  public static async getContactAvatar(filename: string) {
+    try {
+      const response = await apiClient.get(`files/${filename}`, {
+        withCredentials: true,
+        responseType: "blob",
+      });
+      return response;
+    } catch (error) {
+      console.log("Error fetching avatar: ", error);
       throw error;
     }
   }

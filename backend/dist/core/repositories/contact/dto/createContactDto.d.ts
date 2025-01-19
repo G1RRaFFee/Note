@@ -1,9 +1,9 @@
 export declare class CreateContactDto {
-    readonly email?: string;
-    readonly name: string;
-    readonly avatarUrl?: string;
-    readonly phone?: string;
-    readonly birthday?: string;
-    readonly address?: string;
-    readonly userId: number;
+    email: string;
+    name: string;
+    avatarUrl?: string;
+    phone?: string;
+    birthday?: string;
+    address?: string;
+    userId: number;
 }

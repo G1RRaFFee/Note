@@ -45,10 +45,8 @@ export class PostgresContactRepository implements ContactRepository {
   public async createContact(
     createContactDto: CreateContactDto,
   ): Promise<Contact> {
-    const newContact = await this.prismaService.contact.create({
+    return await this.prismaService.contact.create({
       data: createContactDto,
     });
-
-    return newContact;
   }
 }

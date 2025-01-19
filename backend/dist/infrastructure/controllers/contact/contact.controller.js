@@ -16,6 +16,10 @@ exports.ContactController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_guard_1 = require("../../common/guards/auth.guard");
 const contact_service_1 = require("../../../core/services/contact.service");
+const platform_express_1 = require("@nestjs/platform-express");
+const file_config_1 = require("../../config/file/file.config");
+const createContactDto_1 = require("../../../core/repositories/contact/dto/createContactDto");
+const extract_user_1 = require("../../common/decorators/extract.user");
 let ContactController = class ContactController {
     constructor(contactService) {
         this.contactService = contactService;
@@ -25,6 +29,26 @@ let ContactController = class ContactController {
     }
     async getById(id) {
         return await this.contactService.getContactbyId(id);
+    }
+    async createContact(user, createContactDto, avatarUrl) {
+        try {
+            createContactDto.userId = user.id;
+            if (avatarUrl) {
+                createContactDto.avatarUrl = `uploads/${avatarUrl.filename}`;
+            }
+            const contact = await this.contactService.createContact(createContactDto);
+            return {
+                statusCode: common_1.HttpStatus.CREATED,
+                message: 'Contact successfully created.',
+                data: contact,
+            };
+        }
+        catch (error) {
+            if (error instanceof common_1.HttpException) {
+                throw error;
+            }
+            throw new common_1.HttpException({ message: 'Internal server error' }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 };
 exports.ContactController = ContactController;
@@ -41,6 +65,16 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], ContactController.prototype, "getById", null);
+__decorate([
+    (0, common_1.Post)(),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatarUrl', file_config_1.default)),
+    __param(0, (0, extract_user_1.User)()),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, createContactDto_1.CreateContactDto, Object]),
+    __metadata("design:returntype", Promise)
+], ContactController.prototype, "createContact", null);
 exports.ContactController = ContactController = __decorate([
     (0, common_1.Controller)('contacts'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),

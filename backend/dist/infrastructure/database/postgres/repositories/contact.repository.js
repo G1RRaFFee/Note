@@ -42,10 +42,9 @@ let PostgresContactRepository = class PostgresContactRepository {
         return updatedContact;
     }
     async createContact(createContactDto) {
-        const newContact = await this.prismaService.contact.create({
+        return await this.prismaService.contact.create({
             data: createContactDto,
         });
-        return newContact;
     }
 };
 exports.PostgresContactRepository = PostgresContactRepository;

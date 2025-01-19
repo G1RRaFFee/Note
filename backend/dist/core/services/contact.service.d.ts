@@ -1,7 +1,7 @@
 import { Contact } from '../entities/contact.entity';
 import { ContactRepository } from '../repositories/contact/contact.repository';
-import { CreateContactDto } from '../repositories/contact/dto/createContactDto';
 import { UpdateContactDto } from '../repositories/contact/dto/updateContactDto';
+import { CreateContactDto } from '../repositories/contact/dto/createContactDto';
 export declare class ContactService {
     private readonly contactRepository;
     constructor(contactRepository: ContactRepository);

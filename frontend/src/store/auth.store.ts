@@ -23,7 +23,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   signIn: async (email, password) => {
     try {
       const { data } = await AuthService.signIn(email, password);
-      console.log("SignIn response: ", data);
       localStorage.setItem("token", data.accessToken);
       set({ isAuthenticated: true });
       return data;
@@ -36,7 +35,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   signUp: async (username, email, password) => {
     try {
       const response = await AuthService.signUp(username, email, password);
-      console.log(response);
       set({ user: response.data, isAuthenticated: true });
     } catch (error) {
       console.error("SignIn Error:", error);
@@ -70,8 +68,6 @@ export const useAuthStore = create<AuthState>((set) => ({
         {},
         { withCredentials: true }
       );
-
-      console.log("api/auth/refresh response: ", data.accessToken);
 
       localStorage.setItem("token", data.accessToken);
       set({ isAuthenticated: true });

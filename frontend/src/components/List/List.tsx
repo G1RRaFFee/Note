@@ -1,4 +1,8 @@
-import { CSSProperties, ReactNode } from "react";
+"use client";
+
+import { CSSProperties, ReactNode, useState } from "react";
+import { Popup } from "../Popup/Popup";
+import { ContactForm } from "../Form/Form";
 
 interface ListProps<T> {
   items: T[];
@@ -17,17 +21,32 @@ export const List = <T,>({
   className,
   style,
 }: ListProps<T>) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
   return (
-    <ul className={className} style={style}>
-      {items.map((item, index) => (
-        <li
-          key={keyExtractor ? keyExtractor(item, index) : index}
-          onClick={() => onItemClick?.(item, index)}
-          style={{ cursor: onItemClick ? "pointer" : undefined }}
-        >
-          {renderItem(item, index)}
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul className={className} style={style}>
+        {items.map((item, index) => (
+          <li
+            key={keyExtractor ? keyExtractor(item, index) : index}
+            onClick={() => onItemClick?.(item, index)}
+            style={{ cursor: onItemClick ? "pointer" : undefined }}
+          >
+            {renderItem(item, index)}
+          </li>
+        ))}
+      </ul>
+      <button onClick={handleOpenModal}>Создать контакт</button>
+      <Popup isOpen={isModalOpen} onClose={handleCloseModal}>
+        <ContactForm />
+      </Popup>
+    </>
   );
 };

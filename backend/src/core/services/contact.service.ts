@@ -1,8 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Contact } from '../entities/contact.entity';
 import { ContactRepository } from '../repositories/contact/contact.repository';
-import { CreateContactDto } from '../repositories/contact/dto/createContactDto';
 import { UpdateContactDto } from '../repositories/contact/dto/updateContactDto';
+import { CreateContactDto } from '../repositories/contact/dto/createContactDto';
 
 @Injectable()
 export class ContactService {
@@ -11,9 +11,7 @@ export class ContactService {
     private readonly contactRepository: ContactRepository,
   ) {}
 
-  public async createContact(
-    createContactDto: CreateContactDto,
-  ): Promise<Contact> {
+  public async createContact(createContactDto: CreateContactDto) {
     return await this.contactRepository.createContact(createContactDto);
   }
 

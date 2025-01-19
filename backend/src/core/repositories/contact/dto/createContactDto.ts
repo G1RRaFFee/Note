@@ -2,29 +2,35 @@ import {
   IsDateString,
   IsEmail,
   IsNumber,
+  IsOptional,
   IsPhoneNumber,
   IsString,
 } from 'class-validator';
 
 export class CreateContactDto {
   @IsEmail()
-  readonly email?: string;
+  email: string;
 
   @IsString()
-  readonly name: string;
+  name: string;
 
+  @IsOptional()
   @IsString()
-  readonly avatarUrl?: string;
+  avatarUrl?: string;
 
+  @IsOptional()
   @IsPhoneNumber()
-  readonly phone?: string;
+  phone?: string;
 
+  @IsOptional()
   @IsDateString()
-  readonly birthday?: string;
+  birthday?: string;
 
+  @IsOptional()
   @IsString()
-  readonly address?: string;
+  address?: string;
 
+  @IsOptional()
   @IsNumber()
-  readonly userId: number;
+  userId: number;
 }
