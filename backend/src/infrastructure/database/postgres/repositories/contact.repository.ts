@@ -19,9 +19,12 @@ export class PostgresContactRepository implements ContactRepository {
     return foundContact;
   }
 
-  public async getAllContacts(): Promise<Contact[]> {
-    const contacts = await this.prismaService.contact.findMany();
-    return contacts;
+  public async getAllWithIdAndNameOnly(): Promise<
+    { id: number; name: string }[]
+  > {
+    return await this.prismaService.contact.findMany({
+      select: { id: true, name: true },
+    });
   }
 
   public async removeContact(id: number): Promise<Contact> {

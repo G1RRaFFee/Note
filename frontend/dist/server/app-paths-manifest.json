@@ -1,0 +1,4 @@
+{
+  "/page": "app/page.js",
+  "/(protected)/home/page": "app/(protected)/home/page.js"
+}

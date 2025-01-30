@@ -10,8 +10,8 @@ const fileOptions: MulterOptions = {
     fileSize: FILE_SIZE,
   },
   fileFilter: (request, file, callback) => {
-    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-      return callback(new Error('Only image files are allowed!'), false);
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif|mp4|pdf)$/)) {
+      return callback(new Error('Only files are allowed!'), false);
     }
     callback(null, true);
   },

@@ -6,7 +6,10 @@ export declare class ContactService {
     private readonly contactRepository;
     constructor(contactRepository: ContactRepository);
     createContact(createContactDto: CreateContactDto): Promise<Contact>;
-    getAllContacts(): Promise<Contact[]>;
+    getAllWithIdAndNameOnly(): Promise<{
+        id: number;
+        name: string;
+    }[]>;
     updateContact(id: number, updateContactDto: UpdateContactDto): Promise<Contact>;
     getContactbyId(id: number): Promise<Contact | null>;
 }

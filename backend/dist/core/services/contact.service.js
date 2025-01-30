@@ -21,8 +21,8 @@ let ContactService = class ContactService {
     async createContact(createContactDto) {
         return await this.contactRepository.createContact(createContactDto);
     }
-    async getAllContacts() {
-        return await this.contactRepository.getAllContacts();
+    async getAllWithIdAndNameOnly() {
+        return await this.contactRepository.getAllWithIdAndNameOnly();
     }
     async updateContact(id, updateContactDto) {
         const contact = await this.contactRepository.getContactById(id);

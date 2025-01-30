@@ -24,9 +24,10 @@ let PostgresContactRepository = class PostgresContactRepository {
         });
         return foundContact;
     }
-    async getAllContacts() {
-        const contacts = await this.prismaService.contact.findMany();
-        return contacts;
+    async getAllWithIdAndNameOnly() {
+        return await this.prismaService.contact.findMany({
+            select: { id: true, name: true },
+        });
     }
     async removeContact(id) {
         const deletedContact = await this.prismaService.contact.delete({

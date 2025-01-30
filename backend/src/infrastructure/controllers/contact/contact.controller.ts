@@ -16,13 +16,11 @@ import {
 import { AuthGuard } from 'src/infrastructure/common/guards/auth.guard';
 import { ContactService } from 'src/core/services/contact.service';
 import { Contact } from 'src/core/entities/contact.entity';
-import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import fileOptions from 'src/infrastructure/config/file/file.config';
-import { existsSync } from 'fs';
-import { join } from 'path';
 import { CreateContactDto } from 'src/core/repositories/contact/dto/createContactDto';
 import { User } from 'src/infrastructure/common/decorators/extract.user';
+import { ContactDto } from 'src/core/repositories/contact/dto/contact.dto';
 
 @Controller('contacts')
 @UseGuards(AuthGuard)
@@ -30,8 +28,13 @@ export class ContactController {
   public constructor(private readonly contactService: ContactService) {}
 
   @Get()
-  public async getAll(): Promise<Contact[]> {
-    return await this.contactService.getAllContacts();
+  public async getAllWithIdAndNameOnly(): Promise<ContactDto.Response.GetAll> {
+    const contacts = await this.contactService.getAllWithIdAndNameOnly();
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Contacts successfully received',
+      data: { contacts },
+    };
   }
 
   @Get(':id')
@@ -74,16 +77,13 @@ export class ContactController {
     }
   }
 
-  // @Get('avatar/:filename')
-  // getAvatar(@Param('filename') filename: string, @Res() res: Response) {
-  //   console.log(filename);
-  //   const filePath = join(process.cwd(), '..', 'uploads', filename);
-  //   // Проверяем, существует ли файл
-  //   if (!existsSync(filePath)) {
-  //     return res.status(404).send('File not found');
-  //   }
-
-  //   // Отправляем файл в ответе
-  //   return res.sendFile(filePath);
-  // }
+  private handleError(error: any): never {
+    if (error instanceof HttpException) {
+      throw error;
+    }
+    throw new HttpException(
+      { message: 'Internal server error' },
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
+  }
 }

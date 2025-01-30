@@ -1,29 +1,32 @@
-import apiClient from "@/api/axios.config";
-import { AxiosResponse } from "axios";
-
-export interface Contact {
-  readonly id: number;
-  readonly name: string;
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
-  readonly folderID: number[];
-  readonly noteID: number;
-  readonly avatarUrl: string;
-  readonly phone: string;
-  readonly birthday: string;
-  readonly address: string;
-}
+import AxiosInstance from "@/api/axios.config";
+import API from "@/constants/api.constant";
+import { Contact, GetContactsResponse } from "@/types/contact/contact.type";
+import { AxiosError, AxiosResponse } from "axios";
 
 export default class ContactService {
-  public static async getAllContacts(): Promise<AxiosResponse<Contact[]>> {
+  public static async getAllContacts(): Promise<GetContactsResponse> {
     try {
-      const response = await apiClient.get<Contact[]>("/contacts", {
-        withCredentials: true,
-      });
-
-      return response;
+      const { data }: AxiosResponse<GetContactsResponse> =
+        await AxiosInstance.get(API.contacts, {
+          withCredentials: true,
+        });
+      return data;
     } catch (error) {
-      console.log("Error fetching contacts:", error);
+      if (error instanceof AxiosError) {
+        console.error("Axios error:", {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status,
+        });
+
+        if (error.code === "ECONNABORTED") {
+          console.error("Request timeout:", error.message);
+        } else if (!error.response) {
+          console.error("Network error – check your internet connection.");
+        }
+      } else {
+        console.error("Unexpected error", error);
+      }
       throw error;
     }
   }
@@ -32,7 +35,7 @@ export default class ContactService {
     id: number
   ): Promise<AxiosResponse<Contact> | null> {
     try {
-      const responce = await apiClient.get<Contact>(`/contacts/${id}`, {
+      const responce = await AxiosInstance.get<Contact>(`/contacts/${id}`, {
         withCredentials: true,
       });
       return responce;
@@ -47,7 +50,7 @@ export default class ContactService {
       throw Error("Нет данных для отправления");
     }
     try {
-      const response = await apiClient.post("/contacts", data, {
+      const response = await AxiosInstance.post("/contacts", data, {
         withCredentials: true,
       });
       return response;
@@ -59,9 +62,10 @@ export default class ContactService {
 
   public static async getContactAvatar(filename: string) {
     try {
-      const response = await apiClient.get(`files/${filename}`, {
+      const response = await AxiosInstance.get(`files/${filename}`, {
         withCredentials: true,
         responseType: "blob",
+        headers: {},
       });
       return response;
     } catch (error) {

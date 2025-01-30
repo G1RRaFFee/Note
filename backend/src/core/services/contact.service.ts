@@ -15,8 +15,10 @@ export class ContactService {
     return await this.contactRepository.createContact(createContactDto);
   }
 
-  public async getAllContacts(): Promise<Contact[]> {
-    return await this.contactRepository.getAllContacts();
+  public async getAllWithIdAndNameOnly(): Promise<
+    { id: number; name: string }[]
+  > {
+    return await this.contactRepository.getAllWithIdAndNameOnly();
   }
 
   public async updateContact(

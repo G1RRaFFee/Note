@@ -1,4 +1,13 @@
-import { Response } from 'express';
+import { StreamableFile } from '@nestjs/common';
 export declare class FileController {
-    getFileById(filename: string, response: Response): Promise<Response<any, Record<string, any>>>;
+    private readonly uploadsPath;
+    uploadFile(file: Express.Multer.File): {
+        success: number;
+        file: {
+            url: string;
+            name: string;
+            size: number;
+        };
+    };
+    getFile(filename: string): Promise<StreamableFile>;
 }

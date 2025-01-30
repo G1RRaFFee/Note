@@ -24,8 +24,13 @@ let ContactController = class ContactController {
     constructor(contactService) {
         this.contactService = contactService;
     }
-    async getAll() {
-        return await this.contactService.getAllContacts();
+    async getAllWithIdAndNameOnly() {
+        const contacts = await this.contactService.getAllWithIdAndNameOnly();
+        return {
+            statusCode: common_1.HttpStatus.OK,
+            message: 'Contacts successfully received',
+            data: { contacts },
+        };
     }
     async getById(id) {
         return await this.contactService.getContactbyId(id);
@@ -50,6 +55,12 @@ let ContactController = class ContactController {
             throw new common_1.HttpException({ message: 'Internal server error' }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    handleError(error) {
+        if (error instanceof common_1.HttpException) {
+            throw error;
+        }
+        throw new common_1.HttpException({ message: 'Internal server error' }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 };
 exports.ContactController = ContactController;
 __decorate([
@@ -57,7 +68,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], ContactController.prototype, "getAll", null);
+], ContactController.prototype, "getAllWithIdAndNameOnly", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),

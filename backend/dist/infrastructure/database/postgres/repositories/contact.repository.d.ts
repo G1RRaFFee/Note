@@ -7,7 +7,10 @@ export declare class PostgresContactRepository implements ContactRepository {
     private readonly prismaService;
     constructor(prismaService: PrismaService);
     getContactById(id: number): Promise<Contact | null>;
-    getAllContacts(): Promise<Contact[]>;
+    getAllWithIdAndNameOnly(): Promise<{
+        id: number;
+        name: string;
+    }[]>;
     removeContact(id: number): Promise<Contact>;
     updateContact(id: number, updateContactDto: UpdateContactDto): Promise<Contact>;
     createContact(createContactDto: CreateContactDto): Promise<Contact>;

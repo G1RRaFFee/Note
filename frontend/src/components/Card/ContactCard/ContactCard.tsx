@@ -1,155 +1,117 @@
 "use client";
-//TODO: "Добавить в форму для контакта FormData"
-import ContactService, { Contact } from "@/services/contact.service";
-import { FC, useEffect, useState } from "react";
+//TODO: "Добавить в форму для контакта FormData";
+//TODO: "Добавить reactHookForm";
 
-import { KeyValueTable } from "@/components/Table/KeyValueTable/KeyValueTable";
-import { Title } from "@/components/Title/Title";
-import { Avatar } from "@/components/Avatar/Avatar";
+import { ChangeEvent, FC, useState } from "react";
+import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
+
+import { useContact } from "@/hooks/contact.hook";
+import { ContactEditForm } from "@/components/ContactEditForm/ContactEditForm";
+import { ContactDetails } from "@/components/ContactDetails/ContactDetails";
+
+import { Contact } from "@/types/contact/contact.type";
+import ROUTES from "@/constants/routes.constant";
 
 interface ContactCardProps {
   id: number;
 }
 
 export const ContactCard: FC<ContactCardProps> = ({ id }) => {
-  const [contact, setContact] = useState<Contact | null>(null);
+  const { contact, setContact, contactError } = useContact(id);
   const [editedContact, setEditedContact] = useState<Contact | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const router = useRouter();
 
-  useEffect(() => {
-    const fetchContactById = async () => {
-      try {
-        setIsLoading(true);
-        const { data } = await ContactService.getContactById(id);
-        setContact(data);
-      } catch (error) {
-        setError("Failed to load contacts");
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchContactById();
-  }, [id]);
-
-  const handleEditContact = () => {
+  const handleContactEdit = () => {
     setIsEditing(true);
-    setEditedContact({ ...contact }); // Копируем данные контакта для редактирования
+    setEditedContact(contact ? { ...contact } : null);
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  const handleContactEditInputChange = (
+    event: ChangeEvent<HTMLInputElement>
   ) => {
-    const { name, value } = e.target;
-    setEditedContact((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const { name, value } = event.target;
+    setEditedContact((previous) =>
+      previous
+        ? {
+            ...previous,
+            [name]: value,
+          }
+        : previous
+    );
   };
 
-  const handleSaveContact = async () => {
+  const handleContactEditSave = async () => {
     if (!editedContact) return;
 
     try {
-      setIsLoading(true);
       console.log("updateContact: ", editedContact);
       // await ContactService.updateContact(id, editedContact); // Обновляем контакт на сервере
-      setContact(editedContact); // Обновляем данные контакта
-      setIsEditing(false); // Выходим из режима редактирования
+      setContact(editedContact);
+      setIsEditing(false);
     } catch (error) {
-      setError("Failed to update contact");
-      console.error(error);
-    } finally {
-      setIsLoading(false);
+      if (error instanceof AxiosError) {
+        if (error.request) {
+          setError("Failed to update contact.");
+        }
+        if (error.response) {
+          setError(error.response.data.message);
+        }
+      } else {
+        setError("Unexpected error.");
+        console.error(error);
+      }
     }
   };
 
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    setEditedContact(null);
-  };
-
-  const handleDeleteContact = async () => {
+  const handleContactEditDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this contact?")) {
-      return; // Отмена удаления, если пользователь не подтвердил
+      return;
     }
 
     try {
-      setIsLoading(true);
-      console.log("deleteContact");
+      console.log("Contact is deleted.");
       // await ContactService.deleteContact(id); // Удаляем контакт на сервере
-      // Перенаправляем пользователя на страницу со списком контактов
-      window.location.href = "/home"; // Или используйте роутинг, если он есть
+      router.push(ROUTES.home);
     } catch (error) {
-      setError("Failed to delete contact");
-      console.error(error);
-    } finally {
-      setIsLoading(false);
+      if (error instanceof AxiosError) {
+        if (error.request) {
+          setError("Failed to delete contact.");
+        }
+
+        if (error.response) {
+          setError(error.response.data.message);
+        }
+      } else {
+        setError("Unexpected error.");
+        console.error(error);
+      }
     }
   };
-
-  if (isLoading) {
-    return <div>Loading...</div>; // Показываем индикатор загрузки
+  // ПОФИКСИТЬ.
+  if (error) {
+    return <div>{error}</div>;
   }
 
-  if (error) {
-    return <div>{error}</div>; // Показываем ошибку
+  if (contactError) {
+    return <div>{contactError}</div>;
   }
 
   if (!contact) {
-    return <div>No contact found</div>; // Обработка случая, если контакт пустой
+    return <div>No contact found</div>;
   }
 
-  return (
-    <>
-      <article>
-        <Title text={String(contact.name)} size="xl" />
-        {isEditing ? (
-          <div>
-            <label>
-              Name:
-              <input
-                type="text"
-                name="name"
-                value={editedContact?.name || ""}
-                onChange={handleInputChange}
-              />
-            </label>
-            <label>
-              Phone:
-              <input
-                type="text"
-                name="phone"
-                value={editedContact?.phone || ""}
-                onChange={handleInputChange}
-              />
-            </label>
-            <button onClick={handleSaveContact}>Save</button>
-            <button onClick={handleCancelEdit}>Cancel</button>
-            <button onClick={handleDeleteContact}>Delete</button>
-          </div>
-        ) : (
-          <>
-            <KeyValueTable data={contact} />
-            {contact.avatarUrl && (
-              <Avatar avatarUrl={contact.avatarUrl.split("/")[1]} />
-            )}
-            <div>
-              <button onClick={handleEditContact}>Edit</button>
-            </div>
-          </>
-        )}
-      </article>
-    </>
+  return isEditing ? (
+    <ContactEditForm
+      contact={contact}
+      onSave={handleContactEditSave}
+      onDelete={handleContactEditDelete}
+      onCancel={() => setIsEditing(false)}
+      onChange={handleContactEditInputChange}
+    />
+  ) : (
+    <ContactDetails contact={contact} onEdit={handleContactEdit} />
   );
 };
-{
-  /* <ToolBar>
-          <button></button>
-          <button></button>
-          <button></button>
-        </TooBbar> */
-}

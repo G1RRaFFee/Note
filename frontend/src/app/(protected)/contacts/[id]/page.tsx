@@ -17,7 +17,7 @@ const ContactPage: FC<ContactPageProps> = ({ params }: ContactPageProps) => {
   return (
     <>
       <ContactCard id={Number(id)} />
-      {/* <Notes /> */}
+      {/* <Notes initialData={null} /> */}
       {/* <Attachments/> */}
     </>
   );
