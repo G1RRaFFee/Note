@@ -1,14 +1,21 @@
 import AxiosInstance from "@/api/axios.config";
 import API from "@/constants/api.constant";
-import { Contact, GetContactsResponse } from "@/types/contact/contact.type";
+import {
+  Contact,
+  GetPaginatedContactsResponse,
+} from "@/types/contact/contact.type";
 import { AxiosError, AxiosResponse } from "axios";
 
 export default class ContactService {
-  public static async getAllContacts(): Promise<GetContactsResponse> {
+  public static async getPaginatedContacts(
+    page: number,
+    perPage: number
+  ): Promise<GetPaginatedContactsResponse> {
     try {
-      const { data }: AxiosResponse<GetContactsResponse> =
+      const { data }: AxiosResponse<GetPaginatedContactsResponse> =
         await AxiosInstance.get(API.contacts, {
           withCredentials: true,
+          params: { page: page, per_page: perPage },
         });
       return data;
     } catch (error) {

@@ -14,11 +14,37 @@ export class ContactService {
   public async createContact(createContactDto: CreateContactDto) {
     return await this.contactRepository.createContact(createContactDto);
   }
+  public async getPaginatedContacts(
+    page: number,
+    perPage: number,
+  ): Promise<{
+    paginationDetails: {
+      currentPage: number;
+      perPage: number;
+      totalContacts: number;
+      totalPages: number;
+    };
+    contacts: {
+      id: number;
+      name: string;
+    }[];
+  }> {
+    const totalContacts = await this.contactRepository.getTotalContacts();
+    const totalPages = Math.ceil(totalContacts / perPage);
+    const contacts = await this.contactRepository.getPaginatedContacts(
+      page,
+      perPage,
+    );
 
-  public async getAllWithIdAndNameOnly(): Promise<
-    { id: number; name: string }[]
-  > {
-    return await this.contactRepository.getAllWithIdAndNameOnly();
+    return {
+      paginationDetails: {
+        currentPage: page,
+        perPage,
+        totalContacts,
+        totalPages,
+      },
+      contacts: contacts,
+    };
   }
 
   public async updateContact(

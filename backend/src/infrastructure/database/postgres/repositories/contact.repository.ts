@@ -52,4 +52,22 @@ export class PostgresContactRepository implements ContactRepository {
       data: createContactDto,
     });
   }
+
+  public async getTotalContacts(): Promise<number> {
+    return await this.prismaService.contact.count();
+  }
+
+  public async getPaginatedContacts(
+    page: number,
+    perPage: number,
+  ): Promise<{ id: number; name: string }[]> {
+    return await this.prismaService.contact.findMany({
+      skip: (page - 1) * perPage,
+      take: perPage,
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+  }
 }

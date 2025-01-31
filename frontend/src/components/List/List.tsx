@@ -1,3 +1,5 @@
+// TODO: Вынести кнопку из списка.
+
 "use client";
 
 import { CSSProperties, ReactNode, useState } from "react";
@@ -30,6 +32,7 @@ export const List = <T,>({
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
   return (
     <>
       <ul className={className} style={style}>

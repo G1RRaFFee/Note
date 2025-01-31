@@ -2,7 +2,7 @@ node_modules
 *.env.*
 *.env
 todo.global.md
-
+dist
 packages/*/package-lock.json
 sample/*/package-lock.json
 

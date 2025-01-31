@@ -11,10 +11,22 @@ export interface Contact {
   readonly address: string;
 }
 
-export interface GetContactsResponse {
+export interface GetPaginatedContactsResponse {
   statusCode: number;
   message: string;
   data: {
-    contacts: Pick<Contact, "id" | "name">[];
+    paginationDetails: {
+      currentPage: number;
+      perPage: number;
+      totalContacts: number;
+      totalPages: number;
+    };
+    contacts: {
+      id: number;
+      name: string;
+      // surname: string;
+      // patronymic: string;
+      // about: string;
+    }[];
   };
 }

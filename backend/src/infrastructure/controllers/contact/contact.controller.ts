@@ -7,6 +7,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   Req,
   Res,
   UploadedFile,
@@ -28,12 +29,19 @@ export class ContactController {
   public constructor(private readonly contactService: ContactService) {}
 
   @Get()
-  public async getAllWithIdAndNameOnly(): Promise<ContactDto.Response.GetAll> {
-    const contacts = await this.contactService.getAllWithIdAndNameOnly();
+  public async getPaginatedContacts(
+    @Query('page', ParseIntPipe) page: number = 1,
+    @Query('per_page', ParseIntPipe) perPage: number = 10,
+  ): Promise<ContactDto.Response.GetPaginatedContacts> {
+    const contacts = await this.contactService.getPaginatedContacts(
+      page,
+      perPage,
+    );
+
     return {
       statusCode: HttpStatus.OK,
       message: 'Contacts successfully received',
-      data: { contacts },
+      data: contacts,
     };
   }
 
@@ -75,15 +83,5 @@ export class ContactController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-  }
-
-  private handleError(error: any): never {
-    if (error instanceof HttpException) {
-      throw error;
-    }
-    throw new HttpException(
-      { message: 'Internal server error' },
-      HttpStatus.INTERNAL_SERVER_ERROR,
-    );
   }
 }

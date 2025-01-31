@@ -5,10 +5,14 @@ import { UpdateContactDto } from './dto/updateContactDto';
 export interface ContactRepository {
   createContact(createContactDto: CreateContactDto): Promise<Contact>;
   getContactById(id: number): Promise<Contact | null>;
-  getAllWithIdAndNameOnly(): Promise<any>;
   removeContact(id: number): Promise<Contact>;
   updateContact(
     id: number,
     updateContactDto: UpdateContactDto,
   ): Promise<Contact>;
+  getTotalContacts(): Promise<number>;
+  getPaginatedContacts(
+    page: number,
+    perPage: number,
+  ): Promise<{ id: number; name: string }[]>;
 }

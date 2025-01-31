@@ -1,16 +1,27 @@
-import { Contact } from '@prisma/client';
-
+// TODO: Изменить в бд в Contact: name -> name, surname, patronymic; поле about (Краткое сведение о контакте)
 export namespace ContactDto {
   export namespace Request {
     export class Create {}
     export class Update {}
   }
   export namespace Response {
-    export class GetAll {
+    export class GetPaginatedContacts {
       readonly statusCode: number;
       readonly message: string;
       readonly data: {
-        contacts: Pick<Contact, 'name' | 'id'>[];
+        paginationDetails: {
+          currentPage: number;
+          perPage: number;
+          totalContacts: number;
+          totalPages: number;
+        };
+        contacts: {
+          id: number;
+          name: string;
+          // surname: string;
+          // patronymic: string;
+          // about: string;
+        }[];
       };
     }
   }
