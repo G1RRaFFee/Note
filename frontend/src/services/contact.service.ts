@@ -7,15 +7,28 @@ import {
 import { AxiosError, AxiosResponse } from "axios";
 
 export default class ContactService {
+  public static async searchContacts(query: string) {
+    try {
+      const { data } = await AxiosInstance.get("/contacts/search", {
+        params: { q: query },
+      });
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   public static async getPaginatedContacts(
     page: number,
-    perPage: number
+    perPage: number,
+    order?: "asc" | "desc"
   ): Promise<GetPaginatedContactsResponse> {
     try {
       const { data }: AxiosResponse<GetPaginatedContactsResponse> =
         await AxiosInstance.get(API.contacts, {
           withCredentials: true,
-          params: { page: page, per_page: perPage },
+          params: { page: page, per_page: perPage, sort: order },
         });
       return data;
     } catch (error) {

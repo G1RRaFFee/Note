@@ -14,5 +14,6 @@ export interface ContactRepository {
   getPaginatedContacts(
     page: number,
     perPage: number,
+    order?: 'asc' | 'desc',
   ): Promise<{ id: number; name: string }[]>;
 }

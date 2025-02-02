@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import ContactService from "@/services/contact.service";
 import { List } from "@/components/List/List";
 import { SideBar } from "@/components/SideBar/SideBar";
@@ -10,12 +10,16 @@ import Link from "next/link";
 import styles from "./layout.module.css";
 import { AxiosError } from "axios";
 import { Contact } from "@/types/contact/contact.type";
+import { Header } from "@/components/Header/Header";
+import { Container } from "@/components/Container/Container";
+import { Title } from "@/components/Title/Title";
+import { Search } from "@/components/Search/Search";
 
 interface ProtectedlayoutProps {
-  readonly children: ReactNode;
+  children: ReactNode;
 }
 
-const ProtectedLayout: FC<ProtectedlayoutProps> = ({ children }) => {
+const ProtectedLayout = ({ children }: ProtectedlayoutProps): ReactNode => {
   const [contacts, setContacts] = useState<Pick<Contact, "id" | "name">[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,9 +33,9 @@ const ProtectedLayout: FC<ProtectedlayoutProps> = ({ children }) => {
     const fetchContacts = async () => {
       try {
         const { statusCode, message, data } =
-          await ContactService.getPaginatedContacts(page, perPage);
+          await ContactService.getPaginatedContacts(page, perPage, "asc");
         if (statusCode === 200) {
-          console.log(message);
+          console.log("Сообщение от сервера: ", message);
           setContacts((previousContacts) => [
             ...previousContacts,
             ...data.contacts,
@@ -81,13 +85,13 @@ const ProtectedLayout: FC<ProtectedlayoutProps> = ({ children }) => {
   return (
     <>
       <SideBar>
-        {/* <Header> */}
-        {/* <Container>
-          Title
-          Actions
-          </Container> */}
-        {/* <Search /> */}
-        {/* </Header> */}
+        <Header>
+          <Container>
+            <Title text="Контакты" size="l" />
+            {/* Actions */}
+          </Container>
+          <Search />
+        </Header>
         <List
           items={contacts}
           renderItem={(contact) => (

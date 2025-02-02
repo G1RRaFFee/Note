@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { PostgresUserRepository } from 'src/infrastructure/database/postgres/repositories/user.repository';
 import { ContactService } from './contact.service';
 import { PostgresContactRepository } from 'src/infrastructure/database/postgres/repositories/contact.repository';
+import { SearchService } from './search.service';
 
 @Module({
   providers: [
@@ -16,7 +17,8 @@ import { PostgresContactRepository } from 'src/infrastructure/database/postgres/
       provide: 'ContactRepository',
       useClass: PostgresContactRepository,
     },
+    SearchService,
   ],
-  exports: [UserService, ContactService],
+  exports: [UserService, ContactService, SearchService],
 })
 export class ServiceModule {}

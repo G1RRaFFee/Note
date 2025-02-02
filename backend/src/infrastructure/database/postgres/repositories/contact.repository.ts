@@ -19,14 +19,6 @@ export class PostgresContactRepository implements ContactRepository {
     return foundContact;
   }
 
-  public async getAllWithIdAndNameOnly(): Promise<
-    { id: number; name: string }[]
-  > {
-    return await this.prismaService.contact.findMany({
-      select: { id: true, name: true },
-    });
-  }
-
   public async removeContact(id: number): Promise<Contact> {
     const deletedContact = await this.prismaService.contact.delete({
       where: { id: id },
@@ -60,6 +52,7 @@ export class PostgresContactRepository implements ContactRepository {
   public async getPaginatedContacts(
     page: number,
     perPage: number,
+    order?: 'asc' | 'desc',
   ): Promise<{ id: number; name: string }[]> {
     return await this.prismaService.contact.findMany({
       skip: (page - 1) * perPage,
@@ -67,6 +60,9 @@ export class PostgresContactRepository implements ContactRepository {
       select: {
         id: true,
         name: true,
+      },
+      orderBy: {
+        name: order,
       },
     });
   }

@@ -19,7 +19,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { createReadStream, statSync } from 'fs';
 import { lookup } from 'mime-types';
 import { join } from 'path';
-import fileOptions from 'src/infrastructure/config/file/file.config';
+import fileOptions from 'src/infrastructure/config/file.config';
 
 @Controller('files')
 // @UseGuards(AuthGuard)

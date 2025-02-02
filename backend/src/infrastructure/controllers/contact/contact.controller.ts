@@ -8,8 +8,6 @@ import {
   ParseIntPipe,
   Post,
   Query,
-  Req,
-  Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -18,7 +16,7 @@ import { AuthGuard } from 'src/infrastructure/common/guards/auth.guard';
 import { ContactService } from 'src/core/services/contact.service';
 import { Contact } from 'src/core/entities/contact.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
-import fileOptions from 'src/infrastructure/config/file/file.config';
+import fileOptions from 'src/infrastructure/config/file.config';
 import { CreateContactDto } from 'src/core/repositories/contact/dto/createContactDto';
 import { User } from 'src/infrastructure/common/decorators/extract.user';
 import { ContactDto } from 'src/core/repositories/contact/dto/contact.dto';
@@ -28,14 +26,21 @@ import { ContactDto } from 'src/core/repositories/contact/dto/contact.dto';
 export class ContactController {
   public constructor(private readonly contactService: ContactService) {}
 
+  // @Get('/search')
+  // public async searchContacts(@Query('q') query: string) {
+  //   return this.contactService.searchContacts(query);
+  // }
+
   @Get()
   public async getPaginatedContacts(
     @Query('page', ParseIntPipe) page: number = 1,
     @Query('per_page', ParseIntPipe) perPage: number = 10,
+    @Query('sort') order?: 'asc' | 'desc',
   ): Promise<ContactDto.Response.GetPaginatedContacts> {
     const contacts = await this.contactService.getPaginatedContacts(
       page,
       perPage,
+      order,
     );
 
     return {

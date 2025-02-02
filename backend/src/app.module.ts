@@ -7,6 +7,7 @@ import { AuthModule } from './infrastructure/services/auth/auth.module';
 import { ContactController } from './infrastructure/controllers/contact/contact.controller';
 import { ServiceModule } from './core/services/service.module';
 import { FileController } from './infrastructure/controllers/file/file.controller';
+import { SearchController } from './infrastructure/controllers/search/search.controller';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { FileController } from './infrastructure/controllers/file/file.controlle
     AuthModule,
     ServiceModule,
   ],
-  controllers: [ContactController, FileController],
+  controllers: [ContactController, FileController, SearchController],
   providers: [],
 })
 export class AppModule {}
