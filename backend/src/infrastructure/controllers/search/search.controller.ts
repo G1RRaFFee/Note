@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Query } from '@nestjs/common';
 import { SearchService } from 'src/core/services/search.service';
 
 @Controller('search')
@@ -22,17 +22,21 @@ export class SearchController {
       },
     ];
 
-    this.searchService.init(
-      contacts,
-      {
-        keys: ['name'],
-        threshold: 0.8,
-        isCaseSensitive: true,
-        ignoreLocation: true,
-        minMatchCharLength: 2,
-      },
-      ['name'],
-    );
+    this.searchService.init(contacts, {
+      keys: ['name'],
+      threshold: 0.8,
+      isCaseSensitive: true,
+      ignoreLocation: true,
+      minMatchCharLength: 2,
+      shouldSort: true,
+    });
     return this.searchService.search(query);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Contacts found',
+      data: {
+        contacts: '',
+      },
+    };
   }
 }
