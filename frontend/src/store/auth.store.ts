@@ -23,9 +23,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   signIn: async (email, password) => {
     try {
       const { data } = await AuthService.signIn(email, password);
+
+      console.log(data.user);
       localStorage.setItem("token", data.accessToken);
-      set({ isAuthenticated: true });
-      return data;
+      set({ isAuthenticated: true, user: data.user });
+      return data.accessToken;
     } catch (error) {
       console.error("SignIn Error:", error);
       set({ isAuthenticated: false });

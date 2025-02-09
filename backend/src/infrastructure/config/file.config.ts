@@ -3,7 +3,7 @@ import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FILE_SIZE } from 'src/infrastructure/common/constants/file/file.constant';
+import { FILE_SIZE } from 'src/infrastructure/common/constants/file.constant';
 
 const fileOptions: MulterOptions = {
   limits: {

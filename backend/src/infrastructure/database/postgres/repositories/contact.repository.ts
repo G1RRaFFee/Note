@@ -1,35 +1,53 @@
 import { Injectable } from '@nestjs/common';
 
 import { Contact } from 'src/core/entities/contact.entity';
-import { ContactRepository } from 'src/core/repositories/contact/contact.repository';
-import { CreateContactDto } from 'src/core/repositories/contact/dto/createContactDto';
-import { UpdateContactDto } from 'src/core/repositories/contact/dto/updateContactDto';
+import { Repository } from 'src/core/repositories/repository/repository';
 import { PrismaService } from 'src/infrastructure/services/prisma/prisma.service';
 
 @Injectable()
-export class PostgresContactRepository implements ContactRepository {
+export class PostgresContactRepository implements Repository<Contact> {
   public constructor(private readonly prismaService: PrismaService) {}
 
-  public async getContactById(id: number): Promise<Contact | null> {
-    const foundContact = await this.prismaService.contact.findUnique({
+  public async getAll(sort?: {
+    field: keyof Contact;
+    orderBy: 'asc' | 'desc';
+  }): Promise<Contact[]> {
+    return await this.prismaService.contact.findMany({
+      ...(sort ? { orderBy: { [sort.field]: sort.orderBy } } : {}),
+    });
+  }
+
+  public async getAllWithFields<K extends keyof Contact>(
+    fields: K[],
+    sort?: {
+      field: keyof Contact;
+      orderBy: 'asc' | 'desc';
+    },
+  ): Promise<Pick<Contact, K>[]> {
+    return (await this.prismaService.contact.findMany({
+      select: fields.reduce(
+        (accumulator, field) => ({ ...accumulator, [field]: true }),
+        {},
+      ),
+      ...(sort ? { orderBy: { [sort.field]: sort.orderBy } } : {}),
+    })) as Pick<Contact, K>[];
+  }
+
+  public async getById(id: number): Promise<Contact | null> {
+    return await this.prismaService.contact.findUnique({
       where: {
         id: id,
       },
     });
-    return foundContact;
   }
 
-  public async removeContact(id: number): Promise<Contact> {
-    const deletedContact = await this.prismaService.contact.delete({
+  public async remove(id: number): Promise<void> {
+    await this.prismaService.contact.delete({
       where: { id: id },
     });
-    return deletedContact;
   }
 
-  public async updateContact(
-    id: number,
-    updateContactDto: UpdateContactDto,
-  ): Promise<Contact> {
+  public async update(id: number, updateContactDto): Promise<Contact> {
     const updatedContact = await this.prismaService.contact.update({
       where: { id: id },
       data: updateContactDto,
@@ -37,32 +55,51 @@ export class PostgresContactRepository implements ContactRepository {
     return updatedContact;
   }
 
-  public async createContact(
-    createContactDto: CreateContactDto,
-  ): Promise<Contact> {
+  public async create(createContactDto): Promise<Contact> {
     return await this.prismaService.contact.create({
       data: createContactDto,
     });
   }
 
-  public async getTotalContacts(): Promise<number> {
+  public async getTotalCounts(): Promise<number> {
     return await this.prismaService.contact.count();
   }
 
-  public async getPaginatedContacts(
+  public async getAllPaginated(
     page: number,
     perPage: number,
-    order?: 'asc' | 'desc',
-  ): Promise<{ id: number; name: string }[]> {
+    sort?: {
+      field: keyof Contact;
+      orderBy: 'asc' | 'desc';
+    },
+  ) {
     return await this.prismaService.contact.findMany({
       skip: (page - 1) * perPage,
       take: perPage,
       select: {
         id: true,
-        name: true,
+        firstName: true,
+        lastName: true,
+        middleName: true,
+        about: true,
       },
       orderBy: {
-        name: order,
+        [sort.field]: sort.orderBy,
+      },
+    });
+  }
+
+  public async getPinnedContacts() {
+    return await this.prismaService.contact.findMany({
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        middleName: true,
+        about: true,
+      },
+      where: {
+        isPinned: true,
       },
     });
   }

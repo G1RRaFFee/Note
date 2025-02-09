@@ -1,14 +1,14 @@
-// TODO: Изменить в бд в Contact: name -> name, surname, patronymic; поле about (Краткое сведение о контакте)
+import { FuseResult } from 'fuse.js';
+import { Contact } from 'src/core/entities/contact.entity';
+
 export namespace ContactDto {
   export namespace Request {
     export class Create {}
     export class Update {}
   }
   export namespace Response {
-    export class GetPaginatedContacts {
-      readonly statusCode: number;
-      readonly message: string;
-      readonly data: {
+    export namespace Basic {
+      export class GetPaginatedContacts {
         paginationDetails: {
           currentPage: number;
           perPage: number;
@@ -17,12 +17,42 @@ export namespace ContactDto {
         };
         contacts: {
           id: number;
-          name: string;
-          // surname: string;
-          // patronymic: string;
-          // about: string;
+          firstName: string;
+          lastName?: string;
+          middleName?: string;
+          about?: string;
         }[];
-      };
+      }
+    }
+
+    export namespace Full {
+      export class GetPaginatedContacts {
+        readonly statusCode: number;
+        readonly message: string;
+        readonly data: {
+          paginationDetails: {
+            currentPage: number;
+            perPage: number;
+            totalContacts: number;
+            totalPages: number;
+          };
+          contacts: {
+            id: number;
+            firstName: string;
+            lastName?: string;
+            middleName?: string;
+            about?: string;
+          }[];
+        };
+      }
+
+      export class SearchContacts {
+        readonly statusCode: number;
+        readonly message: string;
+        readonly data: {
+          contacts: FuseResult<Contact>[];
+        };
+      }
     }
   }
 }

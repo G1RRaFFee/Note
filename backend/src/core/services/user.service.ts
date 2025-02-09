@@ -2,11 +2,12 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { User } from '@prisma/client';
 import { UserRepository } from '../repositories/user/user.repository';
+import { PROVIDERS } from 'src/infrastructure/common/constants/provider.constant';
 
 @Injectable()
 export class UserService {
   public constructor(
-    @Inject('UserRepository')
+    @Inject(PROVIDERS.userRepository)
     private readonly userRepository: UserRepository,
   ) {}
 

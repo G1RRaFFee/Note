@@ -8,6 +8,9 @@ import { ContactController } from './infrastructure/controllers/contact/contact.
 import { ServiceModule } from './core/services/service.module';
 import { FileController } from './infrastructure/controllers/file/file.controller';
 import { SearchController } from './infrastructure/controllers/search/search.controller';
+import { ContactService } from './core/services/contact.service';
+import { PROVIDERS } from './infrastructure/common/constants/provider.constant';
+import { PostgresContactRepository } from './infrastructure/database/postgres/repositories/contact.repository';
 
 @Module({
   imports: [
@@ -22,6 +25,12 @@ import { SearchController } from './infrastructure/controllers/search/search.con
     ServiceModule,
   ],
   controllers: [ContactController, FileController, SearchController],
-  providers: [],
+  providers: [
+    ContactService,
+    {
+      provide: PROVIDERS.contactRepository,
+      useClass: PostgresContactRepository,
+    },
+  ],
 })
 export class AppModule {}

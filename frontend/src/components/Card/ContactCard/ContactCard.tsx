@@ -10,7 +10,7 @@ import { useContact } from "@/hooks/contact.hook";
 import { ContactEditForm } from "@/components/ContactEditForm/ContactEditForm";
 import { ContactDetails } from "@/components/ContactDetails/ContactDetails";
 
-import { Contact } from "@/types/contact/contact.type";
+import { Contact } from "@/types/contact/entity.type";
 import ROUTES from "@/constants/routes.constant";
 
 interface ContactCardProps {

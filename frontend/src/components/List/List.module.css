@@ -1,0 +1,6 @@
+.list {
+  list-style-type: none;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+}

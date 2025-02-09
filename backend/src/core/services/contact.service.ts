@@ -1,82 +1,39 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
-// import Fuse from 'fuse.js';
-
 import { Contact } from '../entities/contact.entity';
-import { ContactRepository } from '../repositories/contact/contact.repository';
-import { UpdateContactDto } from '../repositories/contact/dto/updateContactDto';
-import { CreateContactDto } from '../repositories/contact/dto/createContactDto';
-
-// import {
-//   TRANSLIT_MAP,
-//   REVERSE_TRANSLIT_MAP,
-// } from 'src/infrastructure/common/constants/contacts/contact.constant';
+// import { Repository } from '../repositories/repository/repository';
+import { PROVIDERS } from 'src/infrastructure/common/constants/provider.constant';
+import { ContactDto } from '../repositories/contact/dto/contact.dto';
+import { PostgresContactRepository } from 'src/infrastructure/database/postgres/repositories/contact.repository';
 
 @Injectable()
 export class ContactService {
-  private contacts = [{ id: 1, name: 'Alex', about: 'Friend' }];
-
   public constructor(
-    @Inject('ContactRepository')
-    private readonly contactRepository: ContactRepository,
+    @Inject(PROVIDERS.contactRepository)
+    private readonly contactRepository: PostgresContactRepository,
   ) {}
 
-  // private transliterate(str: string, reverse = false): string {
-  //   const map = reverse ? REVERSE_TRANSLIT_MAP : TRANSLIT_MAP;
-  //   return str
-  //     .split('')
-  //     .map((char) => map[char.toLowerCase()] || char)
-  //     .join('');
-  // }
-
-  // public async searchContacts(query: string) {
-  //   if (!query) return this.contacts;
-
-  //   const translitQuery = this.transliterate(query);
-  //   const fuse = new Fuse(this.contacts, {
-  //     keys: ['name', 'about'],
-  //     threshold: 0.3,
-  //     ignoreLocation: true,
-  //     isCaseSensitive: false,
-  //   });
-
-  //   const results = [...fuse.search(query), ...fuse.search(translitQuery)];
-
-  //   // Убираем дубликаты, используя Map (уникальный `id`)
-  //   const uniqueResults = new Map();
-  //   results.forEach((result) => {
-  //     uniqueResults.set(result.item.id, result.item);
-  //   });
-
-  //   return Array.from(uniqueResults.values());
-  // }
-
-  public async createContact(createContactDto: CreateContactDto) {
-    return await this.contactRepository.createContact(createContactDto);
+  public async createContact(createContactDto) {
+    return await this.contactRepository.create(createContactDto);
+  }
+  public async getPinnedContacts() {
+    return await this.contactRepository.getPinnedContacts();
   }
 
   public async getPaginatedContacts(
     page: number,
     perPage: number,
-    order?: 'asc' | 'desc',
-  ): Promise<{
-    paginationDetails: {
-      currentPage: number;
-      perPage: number;
-      totalContacts: number;
-      totalPages: number;
-    };
-    contacts: {
-      id: number;
-      name: string;
-    }[];
-  }> {
-    const totalContacts = await this.contactRepository.getTotalContacts();
+    orderBy?: 'asc' | 'desc',
+  ): Promise<ContactDto.Response.Basic.GetPaginatedContacts> {
+    const totalContacts = await this.contactRepository.getTotalCounts();
     const totalPages = Math.ceil(totalContacts / perPage);
-    const contacts = await this.contactRepository.getPaginatedContacts(
+    const contacts = await this.contactRepository.getAllPaginated(
       page,
       perPage,
-      order,
+      {
+        field: 'lastName',
+        orderBy: orderBy,
+      },
     );
 
     return {
@@ -90,20 +47,18 @@ export class ContactService {
     };
   }
 
-  public async updateContact(
-    id: number,
-    updateContactDto: UpdateContactDto,
-  ): Promise<Contact> {
-    const contact = await this.contactRepository.getContactById(id);
+  public async updateContact(id: number, updateContactDto): Promise<Contact> {
+    const contact = await this.contactRepository.getById(id);
 
     if (!contact)
       throw new NotFoundException(`Contact with ID ${id} not found`);
 
-    return await this.contactRepository.updateContact(id, updateContactDto);
+    return await this.contactRepository.update(id, updateContactDto);
   }
 
   public async getContactbyId(id: number): Promise<Contact | null> {
-    const contact = await this.contactRepository.getContactById(id);
+    // переписать, оставив проверку, но возвращая 204 статус
+    const contact = await this.contactRepository.getById(id);
     if (!contact) return null;
     return contact;
   }

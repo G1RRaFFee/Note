@@ -1,0 +1,38 @@
+.list {
+  height: 100%;
+}
+.initial {
+  position: sticky;
+  top: 0;
+  color: #5a5a5a;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0rem;
+  background-color: #272727;
+}
+.link {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.initialGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0rem;
+  gap: 0.25rem;
+  &:hover {
+    background-color: #313131;
+    cursor: pointer;
+  }
+}
+
+.about {
+  font-size: 14px;
+  color: #5a5a5a;
+}

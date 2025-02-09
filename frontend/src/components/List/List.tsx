@@ -1,18 +1,12 @@
-// TODO: Вынести кнопку из списка.
+import { HTMLAttributes, ReactNode } from "react";
 
-"use client";
-
-import { CSSProperties, ReactNode, useState } from "react";
-import { Popup } from "../Popup/Popup";
-import { ContactForm } from "../Form/Form";
-
-interface ListProps<T> {
+interface ListProps<T> extends HTMLAttributes<HTMLElement> {
   items: T[];
   renderItem: (item: T, index: number) => ReactNode;
   keyExtractor?: (item: T, index: number) => string | number;
   onItemClick?: (item: T, index: number) => void;
-  className?: string;
-  style?: CSSProperties;
+  listClassName?: string;
+  itemClassName?: string;
 }
 
 export const List = <T,>({
@@ -20,36 +14,25 @@ export const List = <T,>({
   renderItem,
   keyExtractor,
   onItemClick,
-  className,
   style,
-}: ListProps<T>) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
+  listClassName,
+  itemClassName,
+  ...props
+}: ListProps<T>): ReactNode => {
   return (
     <>
-      <ul className={className} style={style}>
+      <ul className={listClassName} style={style} {...props}>
         {items.map((item, index) => (
           <li
             key={keyExtractor ? keyExtractor(item, index) : index}
             onClick={() => onItemClick?.(item, index)}
             style={{ cursor: onItemClick ? "pointer" : undefined }}
+            className={itemClassName}
           >
             {renderItem(item, index)}
           </li>
         ))}
       </ul>
-      <button onClick={handleOpenModal}>Создать контакт</button>
-      <Popup isOpen={isModalOpen} onClose={handleCloseModal}>
-        <ContactForm />
-      </Popup>
     </>
   );
 };

@@ -33,10 +33,7 @@ export class AuthService {
     return await this.userService.create(email, hashedPassword, username);
   }
 
-  public async signIn(
-    email: string,
-    password: string,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  public async signIn(email: string, password: string) {
     // Проверка на существования пользователя
     // Проверка паролей
     // Генерация JWT
@@ -47,7 +44,19 @@ export class AuthService {
     if (!isPasswordEquals) throw new UnauthorizedException();
 
     const payload = { subset: user.id, email: user.email };
-    return await this.generateTokens(payload.subset);
+    const { accessToken, refreshToken } = await this.generateTokens(
+      payload.subset,
+    );
+
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
+    };
   }
 
   public async generateTokens(userId: number) {

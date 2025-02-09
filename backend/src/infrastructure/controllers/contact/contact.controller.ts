@@ -17,7 +17,6 @@ import { ContactService } from 'src/core/services/contact.service';
 import { Contact } from 'src/core/entities/contact.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import fileOptions from 'src/infrastructure/config/file.config';
-import { CreateContactDto } from 'src/core/repositories/contact/dto/createContactDto';
 import { User } from 'src/infrastructure/common/decorators/extract.user';
 import { ContactDto } from 'src/core/repositories/contact/dto/contact.dto';
 
@@ -26,27 +25,31 @@ import { ContactDto } from 'src/core/repositories/contact/dto/contact.dto';
 export class ContactController {
   public constructor(private readonly contactService: ContactService) {}
 
-  // @Get('/search')
-  // public async searchContacts(@Query('q') query: string) {
-  //   return this.contactService.searchContacts(query);
-  // }
-
   @Get()
   public async getPaginatedContacts(
     @Query('page', ParseIntPipe) page: number = 1,
     @Query('per_page', ParseIntPipe) perPage: number = 10,
-    @Query('sort') order?: 'asc' | 'desc',
-  ): Promise<ContactDto.Response.GetPaginatedContacts> {
+    @Query('order_by') orderBy?: 'asc' | 'desc',
+  ): Promise<ContactDto.Response.Full.GetPaginatedContacts> {
     const contacts = await this.contactService.getPaginatedContacts(
       page,
       perPage,
-      order,
+      orderBy,
     );
-
     return {
       statusCode: HttpStatus.OK,
       message: 'Contacts successfully received',
       data: contacts,
+    };
+  }
+
+  @Get('pinned')
+  public async getPinnedContacts() {
+    const pinntedContacts = await this.contactService.getPinnedContacts();
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Pinned contacts successfully received',
+      data: pinntedContacts,
     };
   }
 
@@ -61,7 +64,7 @@ export class ContactController {
   @UseInterceptors(FileInterceptor('avatarUrl', fileOptions))
   public async createContact(
     @User() user,
-    @Body() createContactDto: CreateContactDto,
+    @Body() createContactDto,
     @UploadedFile() avatarUrl?: Express.Multer.File,
   ) {
     try {

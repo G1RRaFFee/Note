@@ -11,7 +11,6 @@ import {
 import { AuthService } from '../../services/auth/auth.service';
 import { SignUpDto } from '../../../core/repositories/auth/dto/signup.dto';
 import { SignInDto } from '../../../core/repositories/auth/dto/signin.dto';
-import { RefreshTokenDto } from '../../../core/repositories/auth/dto/refresh.dto';
 import { Response, Request } from 'express';
 
 @Controller('auth')
@@ -24,13 +23,12 @@ export class AuthController {
     return this.authService.signUp(signUpDto);
   }
 
-  @HttpCode(HttpStatus.OK)
   @Post('signin')
   public async signIn(
     @Body() signInDto: SignInDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const { accessToken, refreshToken } = await this.authService.signIn(
+    const { accessToken, refreshToken, user } = await this.authService.signIn(
       signInDto.email,
       signInDto.password,
     );
@@ -40,7 +38,14 @@ export class AuthController {
       maxAge: 7 * 30 * 24 * 60 * 60 * 1000,
     });
 
-    return { accessToken };
+    return {
+      codeStatus: HttpStatus.OK,
+      message: 'User successfully signIn',
+      data: {
+        accessToken,
+        user,
+      },
+    };
   }
 
   @Post('refresh')
@@ -48,7 +53,6 @@ export class AuthController {
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ) {
-    console.log('Все cookie: ', request.cookies);
     if (!request.cookies['refreshToken']) {
       throw new UnauthorizedException('Refresh Token is missing');
     }

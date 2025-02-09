@@ -1,41 +1,51 @@
-import { Controller, Get, HttpStatus, Query } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  HttpStatus,
+  Inject,
+  Query,
+} from '@nestjs/common';
+import { Contact } from 'src/core/entities/contact.entity';
+import { ContactDto } from 'src/core/repositories/contact/dto/contact.dto';
+import { Repository } from 'src/core/repositories/repository/repository';
 import { SearchService } from 'src/core/services/search.service';
+import { PROVIDERS } from 'src/infrastructure/common/constants/provider.constant';
 
 @Controller('search')
 export class SearchController {
-  public constructor(private readonly searchService: SearchService<any>) {}
+  private contactSearchService: SearchService<Contact>;
+
+  public constructor(
+    @Inject(PROVIDERS.contactRepository)
+    private readonly contactRepository: Repository<Contact>,
+  ) {
+    this.contactSearchService = new SearchService<Contact>(
+      this.contactRepository,
+    );
+    // TODO: "Поиск ищет только среди contacts, не pinnedContacts"
+    this.contactSearchService.init({
+      keys: ['firstName', 'lastName', 'middleName'],
+      threshold: 0.6,
+      isCaseSensitive: false,
+      ignoreLocation: true,
+      minMatchCharLength: 1,
+    });
+  }
 
   @Get('contacts')
-  public searchContacts(@Query('q') query: string = '') {
-    const contacts = [
-      {
-        id: '1',
-        name: 'Иван Иванов',
-        email: 'ivan@example.com',
-        phone: '+123456789',
-      },
-      {
-        id: '2',
-        name: 'Петр Петров',
-        email: 'petr@example.com',
-        phone: '+987654321',
-      },
-    ];
-
-    this.searchService.init(contacts, {
-      keys: ['name'],
-      threshold: 0.8,
-      isCaseSensitive: true,
-      ignoreLocation: true,
-      minMatchCharLength: 2,
-      shouldSort: true,
-    });
-    return this.searchService.search(query);
+  public async searchContacts(
+    @Query('q') query: string,
+  ): Promise<ContactDto.Response.Full.SearchContacts> {
+    if (!query) {
+      throw new BadRequestException('Query missing');
+    }
+    const result = await this.contactSearchService.search(query);
     return {
       statusCode: HttpStatus.OK,
-      message: 'Contacts found',
+      message: 'Сontact(s) successfully found',
       data: {
-        contacts: '',
+        contacts: result,
       },
     };
   }

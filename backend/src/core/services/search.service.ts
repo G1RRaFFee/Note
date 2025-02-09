@@ -1,52 +1,55 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import Fuse, { FuseResult, IFuseOptions } from 'fuse.js';
 import {
   convertCyrillicToLatin,
   convertLatinToCyrillic,
   detectLanguage,
 } from 'src/infrastructure/helpers/search.helper';
+import { Repository } from '../repositories/repository/repository';
+import { PROVIDERS } from 'src/infrastructure/common/constants/provider.constant';
 
 @Injectable()
 export class SearchService<T> {
+  private cache: T[] = [];
   private fuse: Fuse<T>;
-  private cache: Map<string, FuseResult<T>[]> = new Map();
+  private options: IFuseOptions<T>;
 
-  init(data: T[], options: IFuseOptions<T>): void {
-    this.fuse = new Fuse(data, options);
+  public constructor(
+    @Inject(PROVIDERS.repository)
+    private readonly repository: Repository<T>,
+  ) {}
+
+  public async refreshCache(): Promise<void> {
+    this.cache = await this.repository.getAll();
+    if (this.options) {
+      this.fuse = new Fuse(this.cache, this.options);
+    }
   }
 
-  //   TODO: "Посмотреть про кеш и вынести detectLanguage в helpers";
-  public search(query: string): FuseResult<T>[] {
+  public init(options: IFuseOptions<T>): void {
+    this.options = options;
+    this.fuse = new Fuse(this.cache, this.options);
+  }
+
+  public async search(query: string): Promise<FuseResult<T>[]> {
     if (!this.fuse) {
       throw new Error('Fuse.js is not initialized. Call init() first.');
     }
+    const lowerCaseQuery = query.toLowerCase();
+    // FIXME: По идее нужно удалить
+    if (this.cache.length === 0) await this.refreshCache();
 
-    // Проверяем кэш
-    if (this.cache.has(query)) {
-      console.log('Returning cached result for query:', query);
-      return this.cache.get(query)!;
-    }
+    const language = detectLanguage(lowerCaseQuery);
+    let searchResult = this.fuse.search(lowerCaseQuery);
 
-    // Определяем язык запроса
-    const language = detectLanguage(query);
-    console.log('Detected language:', language);
-
-    // Поиск как есть
-    let searchResult = this.fuse.search(query);
-    console.log('Initial search result:', searchResult);
-
-    // Если результаты не найдены, пробуем транслитерировать запрос
     if (searchResult.length === 0) {
       const translatedQuery =
         language === 'ru'
-          ? convertCyrillicToLatin(query)
-          : convertLatinToCyrillic(query);
-      console.log('Translated query:', translatedQuery);
+          ? convertCyrillicToLatin(lowerCaseQuery)
+          : convertLatinToCyrillic(lowerCaseQuery);
       searchResult = this.fuse.search(translatedQuery);
     }
 
-    // Сохраняем результат в кэш
-    this.cache.set(query, searchResult);
     return searchResult;
   }
 }

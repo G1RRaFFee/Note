@@ -1,26 +1,26 @@
-import {
-  IsDateString,
-  IsEmail,
-  IsPhoneNumber,
-  IsString,
-} from 'class-validator';
+// import {
+//   IsDateString,
+//   IsEmail,
+//   IsPhoneNumber,
+//   IsString,
+// } from 'class-validator';
 
-export class UpdateContactDto {
-  @IsString()
-  readonly name: string;
+// export class UpdateContactDto {
+//   @IsString()
+//   readonly name: string;
 
-  @IsString()
-  readonly avatarUrl?: string;
+//   @IsString()
+//   readonly avatarUrl?: string;
 
-  @IsEmail()
-  readonly email?: string;
+//   @IsEmail()
+//   readonly email?: string;
 
-  @IsPhoneNumber()
-  readonly phone?: string;
+//   @IsPhoneNumber()
+//   readonly phone?: string;
 
-  @IsDateString()
-  readonly birthday?: string;
+//   @IsDateString()
+//   readonly birthday?: string;
 
-  @IsString()
-  readonly address?: string;
-}
+//   @IsString()
+//   readonly address?: string;
+// }

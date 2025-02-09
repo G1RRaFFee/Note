@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Contact } from "@/services/contact.service";
+import { Contact } from "@/types/contact/entity.type";
 import ContactService from "@/services/contact.service";
 import { AxiosError } from "axios";
 
