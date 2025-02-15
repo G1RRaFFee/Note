@@ -1,0 +1,52 @@
+.main {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list {
+  overflow-y: scroll;
+  height: 100%;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ВЫНЕСТИ СТИЛИ */
+.action {
+  display: flex;
+  .button {
+    border: none;
+    background-color: transparent;
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.5rem;
+    &:hover {
+      background-color: #5a5a5a;
+    }
+  }
+}
+.contacts {
+  list-style-type: none;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+}
+
+.split {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.gutter {
+  background-color: #eee;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+/* .gutter.gutter-horizontal {
+  background-color: red;
+  cursor: col-resize;
+} */

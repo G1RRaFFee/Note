@@ -9,7 +9,6 @@ import { hash, compare } from 'bcrypt';
 import { User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 
-import { v4 as uuidv4 } from 'uuid';
 import { PrismaService } from 'src/infrastructure/services/prisma/prisma.service';
 
 @Injectable()
@@ -43,7 +42,11 @@ export class AuthService {
     const isPasswordEquals = await compare(password, user.password);
     if (!isPasswordEquals) throw new UnauthorizedException();
 
-    const payload = { subset: user.id, email: user.email };
+    const payload = {
+      subset: user.id,
+      username: user.username,
+      email: user.email,
+    };
     const { accessToken, refreshToken } = await this.generateTokens(
       payload.subset,
     );

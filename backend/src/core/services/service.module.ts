@@ -6,9 +6,18 @@ import { PostgresContactRepository } from 'src/infrastructure/database/postgres/
 import { SearchService } from './search.service';
 import { PROVIDERS } from 'src/infrastructure/common/constants/provider.constant';
 import { PostgresRepository } from 'src/infrastructure/database/postgres/repositories/base.repository';
+import { FolderService } from './folder.service';
+import { PostgresFolderRepository } from 'src/infrastructure/database/postgres/repositories/folder.repository';
+import { NotificationService } from './notification.service';
 
 @Module({
   providers: [
+    NotificationService,
+    FolderService,
+    {
+      provide: 'FolderRepository',
+      useClass: PostgresFolderRepository,
+    },
     UserService,
     {
       provide: PROVIDERS.userRepository,
@@ -25,6 +34,12 @@ import { PostgresRepository } from 'src/infrastructure/database/postgres/reposit
       useClass: PostgresRepository,
     },
   ],
-  exports: [UserService, ContactService, SearchService],
+  exports: [
+    UserService,
+    ContactService,
+    SearchService,
+    FolderService,
+    NotificationService,
+  ],
 })
 export class ServiceModule {}

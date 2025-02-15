@@ -54,10 +54,13 @@ export class ContactController {
   }
 
   @Get(':id')
-  public async getById(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<Contact | null> {
-    return await this.contactService.getContactbyId(id);
+  public async getById(@Param('id', ParseIntPipe) id: number) {
+    const contact = await this.contactService.getContactbyId(id);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Contact successfully received',
+      data: contact,
+    };
   }
 
   @Post()

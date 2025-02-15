@@ -7,15 +7,35 @@ import {
   Res,
   Req,
   UnauthorizedException,
+  Get,
+  UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { AuthService } from '../../services/auth/auth.service';
 import { SignUpDto } from '../../../core/repositories/auth/dto/signup.dto';
 import { SignInDto } from '../../../core/repositories/auth/dto/signin.dto';
 import { Response, Request } from 'express';
+import { GetUser } from 'src/infrastructure/common/decorators/getUser.decorator';
+import { AuthGuard } from 'src/infrastructure/common/guards/auth.guard';
+import { UserService } from 'src/core/services/user.service';
 
 @Controller('auth')
 export class AuthController {
-  public constructor(private readonly authService: AuthService) {}
+  public constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
+
+  @UseGuards(AuthGuard)
+  @Get('me')
+  public async getMe(@GetUser('id', ParseIntPipe) userId: number) {
+    const user = await this.userService.findById(userId);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Success',
+      data: user,
+    };
+  }
 
   @HttpCode(HttpStatus.OK)
   @Post('signup')

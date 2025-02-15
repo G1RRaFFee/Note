@@ -27,6 +27,17 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(protected)/home/page.js"
+    ],
+    "/(protected)/folders/[folderId]/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(protected)/folders/[folderId]/layout.css",
+      "static/chunks/app/(protected)/folders/[folderId]/layout.js"
+    ],
+    "/(protected)/folders/[folderId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/folders/[folderId]/page.js"
     ]
   }
 }

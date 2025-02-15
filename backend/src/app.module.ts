@@ -11,6 +11,8 @@ import { SearchController } from './infrastructure/controllers/search/search.con
 import { ContactService } from './core/services/contact.service';
 import { PROVIDERS } from './infrastructure/common/constants/provider.constant';
 import { PostgresContactRepository } from './infrastructure/database/postgres/repositories/contact.repository';
+import { FolderController } from './infrastructure/controllers/folder/folder.controller';
+import { NotificationController } from './infrastructure/controllers/notification/notification.controller';
 
 @Module({
   imports: [
@@ -24,7 +26,13 @@ import { PostgresContactRepository } from './infrastructure/database/postgres/re
     AuthModule,
     ServiceModule,
   ],
-  controllers: [ContactController, FileController, SearchController],
+  controllers: [
+    ContactController,
+    FileController,
+    SearchController,
+    FolderController,
+    NotificationController,
+  ],
   providers: [
     ContactService,
     {

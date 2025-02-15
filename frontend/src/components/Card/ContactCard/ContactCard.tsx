@@ -14,11 +14,11 @@ import { Contact } from "@/types/contact/entity.type";
 import ROUTES from "@/constants/routes.constant";
 
 interface ContactCardProps {
-  id: number;
+  contactId: number;
 }
 
-export const ContactCard: FC<ContactCardProps> = ({ id }) => {
-  const { contact, setContact, contactError } = useContact(id);
+export const ContactCard: FC<ContactCardProps> = ({ contactId }) => {
+  const { contact, setContact, contactError } = useContact(contactId);
   const [editedContact, setEditedContact] = useState<Contact | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [error, setError] = useState<string>("");

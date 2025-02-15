@@ -20,8 +20,8 @@ model Contact {
     userId Int
     user   User @relation(fields: [userId], references: [id])
 
-    folders       Folder[]        @relation("ContactFolders")
-    ContactFolder ContactFolder[]
+    folderId Int?
+    folder   Folder? @relation(fields: [folderId], references: [id])
 
     @@map("contacts")
 }

@@ -1,6 +1,6 @@
 import { KeyValueTable } from "../Table/KeyValueTable/KeyValueTable";
 import { Avatar } from "../Avatar/Avatar";
-import { Contact } from "@/services/contact.service";
+import { Contact } from "@/types/contact/entity.type";
 import { JSX } from "react";
 
 interface ContactDetailsProps {
@@ -14,7 +14,7 @@ export const ContactDetails = ({
 }: ContactDetailsProps): JSX.Element => {
   return (
     <article>
-      <h1>{contact.name}</h1>
+      <h1>{contact.firstName}</h1>
       <KeyValueTable data={contact} />
       {contact.avatarUrl && (
         <Avatar avatarUrl={contact.avatarUrl.split("/")[1]} />

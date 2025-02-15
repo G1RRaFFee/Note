@@ -1,19 +1,13 @@
 model Folder {
-    id            Int             @id @default(autoincrement())
-    name          String
-    createdAt     DateTime        @default(now())
-    updatedAt     DateTime        @updatedAt
-    contacts      Contact[]       @relation("ContactFolders")
-    ContactFolder ContactFolder[]
+    id Int @id @default(autoincrement())
+
+    name String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    isReserved Boolean   @default(false)
+    contacts   Contact[]
 
     @@map("folders")
-}
-
-model ContactFolder {
-    contactId Int
-    folderId  Int
-    contact   Contact @relation(fields: [contactId], references: [id])
-    folder    Folder  @relation(fields: [folderId], references: [id])
-
-    @@id([contactId, folderId])
 }

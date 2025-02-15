@@ -1,0 +1,6 @@
+.rotateIcon svg {
+  transform: rotate(180deg);
+}
+.defaultIcon {
+  transform: rotate(0);
+}

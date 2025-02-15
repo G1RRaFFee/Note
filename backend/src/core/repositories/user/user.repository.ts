@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create.dto';
 import { UpdateUserDto } from './dto/update.dto';
 
 export interface UserRepository {
-  getUserById(id: number): Promise<User | null>;
+  getUserById(id: number);
   getUserByEmail(email: string);
   createUser(creatUserDto: CreateUserDto): Promise<User>;
   updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User>;

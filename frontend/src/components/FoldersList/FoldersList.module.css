@@ -1,0 +1,54 @@
+.sideBar {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  gap: 1rem;
+  padding: 1rem;
+}
+.groupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  &:hover {
+    cursor: pointer;
+  }
+}
+.contactsGroup {
+  list-style-type: none;
+  height: 100%;
+}
+.closeContactsGroup {
+  max-height: 0;
+  overflow: hidden;
+}
+
+.title {
+  font-weight: 400;
+  color: #5a5a5a;
+}
+.button {
+  background-color: transparent;
+  border: none;
+  color: #5a5a5a;
+}
+
+.link {
+  display: flex;
+}
+.item {
+  padding: 0.5rem;
+  color: #a5a5a5;
+  border-radius: 0.5rem;
+  &:hover {
+    color: white;
+    cursor: pointer;
+    background-color: #272727;
+  }
+}
+
+.activeItem {
+  padding: 0.5rem;
+  color: white;
+  border-radius: 0.5rem;
+  background-color: #272727;
+}

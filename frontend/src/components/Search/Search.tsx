@@ -22,7 +22,6 @@ export const Search = ({ ...props }: SearchProps): JSX.Element => {
 
     if (value.trim().length > 0) {
       const searchResult = await ContactService.searchContacts(value);
-      console.log(searchResult);
       setResults(searchResult.data.contacts);
     } else {
       setResults([]);

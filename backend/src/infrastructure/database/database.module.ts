@@ -2,19 +2,19 @@ import { Module } from '@nestjs/common';
 import { PostgresUserRepository } from './postgres/repositories/user.repository';
 import { PrismaModule } from '../services/prisma/prisma.module';
 import { PostgresContactRepository } from './postgres/repositories/contact.repository';
-// import { PostgresRepository } from './postgres/repositories/repository';
+import { PostgresFolderRepository } from './postgres/repositories/folder.repository';
 
 @Module({
   imports: [PrismaModule],
   providers: [
     PostgresUserRepository,
     PostgresContactRepository,
-    // PostgresRepository,
+    PostgresFolderRepository,
   ],
   exports: [
     PostgresUserRepository,
     PostgresContactRepository,
-    // PostgresRepository,
+    PostgresFolderRepository,
   ],
 })
 export class DatabaseModule {}

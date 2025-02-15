@@ -9,9 +9,14 @@ import { UpdateUserDto } from 'src/core/repositories/user/dto/update.dto';
 export class PostgresUserRepository implements UserRepository {
   public constructor(private readonly prismaService: PrismaService) {}
 
-  public async getUserById(id: number): Promise<User | null> {
+  public async getUserById(id: number) {
     const user = await this.prismaService.user.findUnique({
       where: { id: id },
+      select: {
+        id: true,
+        username: true,
+        avatarUrl: true,
+      },
     });
 
     if (!user) throw new NotFoundException();

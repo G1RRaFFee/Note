@@ -6,5 +6,6 @@ export class User {
     readonly password: string,
     readonly createdAt: Date,
     readonly updatedAt: Date,
+    readonly avatarUrl?: string,
   ) {}
 }

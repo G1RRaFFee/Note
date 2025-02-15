@@ -20,19 +20,17 @@ export const List = <T,>({
   ...props
 }: ListProps<T>): ReactNode => {
   return (
-    <>
-      <ul className={listClassName} style={style} {...props}>
-        {items.map((item, index) => (
-          <li
-            key={keyExtractor ? keyExtractor(item, index) : index}
-            onClick={() => onItemClick?.(item, index)}
-            style={{ cursor: onItemClick ? "pointer" : undefined }}
-            className={itemClassName}
-          >
-            {renderItem(item, index)}
-          </li>
-        ))}
-      </ul>
-    </>
+    <ul className={listClassName} style={style} {...props}>
+      {items.map((item, index) => (
+        <li
+          key={keyExtractor ? keyExtractor(item, index) : index}
+          onClick={() => onItemClick?.(item, index)}
+          style={{ cursor: onItemClick ? "pointer" : undefined }}
+          className={itemClassName}
+        >
+          {renderItem(item, index)}
+        </li>
+      ))}
+    </ul>
   );
 };

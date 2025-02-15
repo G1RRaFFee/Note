@@ -10,8 +10,10 @@ export const useContact = (id: number) => {
   useEffect(() => {
     const fetchContactById = async () => {
       try {
-        const { data } = await ContactService.getContactById(id);
-        setContact(data);
+        const { statusCode, data } = await ContactService.getContactById(id);
+        if (statusCode == 200) {
+          setContact(data);
+        }
       } catch (error) {
         if (error instanceof AxiosError) {
           setContactError("Failed to load contacts.");

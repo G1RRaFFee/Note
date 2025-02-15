@@ -6,8 +6,14 @@ import { AxiosError, AxiosResponse } from "axios";
 export default class ContactService {
   public static async getPinnedContacts() {
     try {
-      const { data } = await AxiosInstance.get(API.pinnedContacts);
-      return data;
+      const response = await AxiosInstance.get(API.pinnedContacts);
+
+      const { statusCode, message, data } = response.data;
+      return {
+        statusCode,
+        message,
+        data,
+      };
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error("Axios error:", {

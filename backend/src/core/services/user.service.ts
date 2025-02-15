@@ -31,12 +31,12 @@ export class UserService {
     password: string,
     username: string,
   ): Promise<User | null> {
-    const user = await this.userRepository.createUser({
-      username: username,
-      email: email,
-      password: password,
-    });
+    // const user = await this.userRepository.createUser({
+    //   username: username,
+    //   email: email,
+    //   password: password,
+    // });
 
-    return user;
+    return;
   }
 }
