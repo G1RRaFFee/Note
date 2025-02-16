@@ -1,5 +1,0 @@
-{
-  "/(protected)/folders/[folderId]/page": "app/(protected)/folders/[folderId]/page.js",
-  "/page": "app/page.js",
-  "/(protected)/home/page": "app/(protected)/home/page.js"
-}

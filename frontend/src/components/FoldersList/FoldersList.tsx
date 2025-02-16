@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { JSX, useState } from "react";
+import { Fragment, JSX, useState } from "react";
 
 import { useFolders } from "@/hooks/folders.hook";
 
@@ -21,7 +21,7 @@ export const FoldersList = (): JSX.Element => {
   };
 
   return (
-    <>
+    <Fragment>
       <List<Folder>
         onItemClick={(folder) => handleItemClick(folder)}
         items={folders}
@@ -32,6 +32,6 @@ export const FoldersList = (): JSX.Element => {
           </Link>
         )}
       />
-    </>
+    </Fragment>
   );
 };

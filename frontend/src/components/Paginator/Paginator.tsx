@@ -1,10 +1,10 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 
-type PaginatorProps = {
-  children: React.ReactNode;
+interface PaginatorProps {
+  children: ReactNode;
   onLoadMore: () => void;
   hasMore: boolean;
-};
+}
 
 const Paginator = ({
   children,
@@ -42,9 +42,11 @@ const Paginator = ({
   }, [isIntersecting, hasMore, onLoadMore]);
 
   return (
-    <div>
+    <div className="Paginator">
       {children}
-      {hasMore && <div ref={observerRef} style={{ height: 1 }} />}
+      {hasMore && (
+        <div ref={observerRef} style={{ height: 1, backgroundColor: "pink" }} />
+      )}
     </div>
   );
 };

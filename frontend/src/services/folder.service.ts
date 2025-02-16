@@ -32,10 +32,20 @@ export class Folderservice {
     }
   }
 
-  public static async getAllContactsFromFolder(folderId: number) {
+  public static async getAllContactsFromFolder(
+    folderId: number,
+    options?: { perPage?: number; page?: number }
+  ) {
     try {
-      const response = await AxiosInstance.get(`${API.folders}/${folderId}`);
+      const response = await AxiosInstance.get(`${API.folders}/${folderId}`, {
+        params: {
+          per_page: options?.perPage,
+          page: options?.page,
+        },
+      });
+
       const { statusCode, message, data } = response.data;
+
       return {
         statusCode,
         message,

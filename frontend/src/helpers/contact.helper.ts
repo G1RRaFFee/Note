@@ -1,16 +1,31 @@
-interface Contact {
-  lastName: string;
-  firstName: string;
-  patronymic?: string;
-  details?: string;
-}
-// Определение начальной буквы
-export const getInitial = (contact: Contact): string => {
-  const initial =
-    contact.lastName?.[0]?.toUpperCase() ||
-    contact.firstName?.[0]?.toUpperCase() ||
-    contact.patronymic?.[0]?.toUpperCase() ||
-    "#";
+import { Contact } from "@/types/contact/entity.type";
 
-  return initial.match(/[A-ZА-Я]/)?.[0] || "#"; // Только буквы
+type GroupedContacts = { [key: string]: Contact[] };
+type Initials = string[];
+
+type GroupedContactsResult = {
+  initials: Initials;
+  groupedContacts: GroupedContacts;
+};
+
+export const groupContactsByInitial = (
+  contacts: Contact[]
+): GroupedContactsResult => {
+  const groupedContacts: { [key: string]: Contact[] } = {};
+  contacts.forEach((contact) => {
+    const initial = (
+      contact.lastName?.charAt(0) || contact.firstName?.charAt(0)
+    )?.toUpperCase();
+
+    if (initial) {
+      if (!groupedContacts[initial]) {
+        groupedContacts[initial] = [];
+      }
+      groupedContacts[initial].push(contact);
+    }
+  });
+
+  const initials = Object.keys(groupedContacts).sort();
+
+  return { initials, groupedContacts };
 };

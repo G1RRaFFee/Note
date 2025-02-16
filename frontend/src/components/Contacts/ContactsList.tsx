@@ -1,70 +1,50 @@
 "use client";
-
+// TODO: Проверить работу Paginator в ContactsList (Добавить больше контактов )
 import Link from "next/link";
 
-import { JSX, useEffect, useState } from "react";
+import { Fragment, JSX, useState } from "react";
 import { List } from "../List/List";
 
 import styles from "./Contacts.module.css";
+import { useContactsFromFolder } from "@/hooks/useContactsFromFolder";
+import { groupContactsByInitial } from "@/helpers/contact.helper";
 import { Contact } from "@/types/contact/entity.type";
-import { Folderservice } from "@/services/folder.service";
-
-function groupContactsByInitial(contacts: Contact[]) {
-  const groupedContacts: { [key: string]: Contact[] } = {};
-  contacts.forEach((contact) => {
-    const initial = (
-      contact.lastName?.charAt(0) || contact.firstName?.charAt(0)
-    )?.toUpperCase();
-
-    if (initial) {
-      if (!groupedContacts[initial]) {
-        groupedContacts[initial] = [];
-      }
-      groupedContacts[initial].push(contact);
-    }
-  });
-
-  const initials = Object.keys(groupedContacts).sort();
-
-  return { initials, groupedContacts };
-}
+import Paginator from "../Paginator/Paginator";
 
 interface ContactslistProps {
   folderId: string | number;
 }
 
 export const ContactsList = ({ folderId }: ContactslistProps): JSX.Element => {
-  const [contacts, setContacts] = useState([]);
-  const { initials, groupedContacts } = groupContactsByInitial(contacts);
-  // TODO: Вынести в хук и переписать сервис папок
-  useEffect(() => {
-    const fetchContactsFromFolder = async (folderId: number) => {
-      const { statusCode, data } = await Folderservice.getAllContactsFromFolder(
-        folderId
-      );
-      if (statusCode === 200) {
-        setContacts(data);
-      }
-    };
+  const [page, setPage] = useState(1);
+  const perPage = 20;
 
-    fetchContactsFromFolder(Number(folderId));
-  }, [folderId]);
+  const { contactsFromFolder, hasMore } = useContactsFromFolder(folderId, {
+    perPage: perPage,
+    page: page,
+  });
+  const { initials, groupedContacts } =
+    groupContactsByInitial(contactsFromFolder);
+
+  const handleLoadMore = (): void => {
+    setPage((prev) => prev + 1);
+  };
 
   return (
-    <>
-      <List
+    <Paginator onLoadMore={handleLoadMore} hasMore={hasMore}>
+      <List<string>
         listClassName={styles.contactsList}
         itemClassName={styles.initialGroup}
         items={initials}
         renderItem={(initial) => (
-          <>
+          <Fragment>
             <span className={styles.initial}>{initial}</span>
-            <List
+            <List<Contact>
               listClassName={styles.list}
               itemClassName={styles.item}
               items={groupedContacts[initial]}
               renderItem={(contact) => (
-                <>
+                <Fragment>
                   <Link
                     className={styles.link}
                     href={`/folders/${folderId}/contacts/${contact.id}`}
@@ -72,12 +52,12 @@ export const ContactsList = ({ folderId }: ContactslistProps): JSX.Element => {
                     {contact.lastName} {contact.firstName} {contact.middleName}
                     <span className={styles.about}>{contact.about}</span>
                   </Link>
-                </>
+                </Fragment>
               )}
             />
-          </>
+          </Fragment>
         )}
       />
-    </>
+    </Paginator>
   );
 };
