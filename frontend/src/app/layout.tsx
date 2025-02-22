@@ -18,7 +18,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className}`}>{children}</body>
+      <body
+        style={{ borderTop: "rgba(117,117,117, 0.4) solid 1px" }}
+        className={`${inter.className}`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

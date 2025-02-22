@@ -14,11 +14,10 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from 'src/infrastructure/common/guards/auth.guard';
 import { ContactService } from 'src/core/services/contact.service';
-import { Contact } from 'src/core/entities/contact.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
-import fileOptions from 'src/infrastructure/config/file.config';
 import { User } from 'src/infrastructure/common/decorators/extract.user';
 import { ContactDto } from 'src/core/repositories/contact/dto/contact.dto';
+import fileOptions from 'src/infrastructure/config/file.config';
 
 @Controller('contacts')
 @UseGuards(AuthGuard)
@@ -26,16 +25,11 @@ export class ContactController {
   public constructor(private readonly contactService: ContactService) {}
 
   @Get()
-  public async getPaginatedContacts(
+  public async getAllContacts(
     @Query('page', ParseIntPipe) page: number = 1,
     @Query('per_page', ParseIntPipe) perPage: number = 10,
-    @Query('order_by') orderBy?: 'asc' | 'desc',
   ): Promise<ContactDto.Response.Full.GetPaginatedContacts> {
-    const contacts = await this.contactService.getPaginatedContacts(
-      page,
-      perPage,
-      orderBy,
-    );
+    const contacts = await this.contactService.getAllContacts(page, perPage);
     return {
       statusCode: HttpStatus.OK,
       message: 'Contacts successfully received',

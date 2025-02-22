@@ -9,6 +9,19 @@ import { UpdateUserDto } from 'src/core/repositories/user/dto/update.dto';
 export class PostgresUserRepository implements UserRepository {
   public constructor(private readonly prismaService: PrismaService) {}
 
+  public async getUserByReservedFolder(reservedFolderId: number) {
+    return await this.prismaService.user.findUnique({
+      where: {
+        reservedFolderId: reservedFolderId,
+      },
+      select: {
+        id: true,
+        username: true,
+        avatarUrl: true,
+      },
+    });
+  }
+
   public async getUserById(id: number) {
     const user = await this.prismaService.user.findUnique({
       where: { id: id },

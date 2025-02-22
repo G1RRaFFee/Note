@@ -1,0 +1,73 @@
+.initial {
+  position: sticky;
+  top: 0;
+  color: #5a5a5a;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: #272727;
+  padding: 0.5rem 0rem 0.5rem 1rem;
+  border-bottom: rgba(90, 90, 90, 0.5) solid 1px;
+}
+.contactAvatar {
+  border-radius: 99px;
+}
+.divider {
+  color: #5a5a5a;
+  opacity: 0.15;
+  margin: 0 0.5rem;
+}
+.link {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  .contactData {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+
+.activeLink {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: #313131;
+  .contactData {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+.initialGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  &:hover {
+    background-color: #313131;
+    cursor: pointer;
+  }
+}
+
+.contactsList {
+  padding-bottom: 0.5rem;
+  display: flex;
+  padding-bottom: 0.5rem;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+.about {
+  font-size: 14px;
+  color: #5a5a5a;
+}

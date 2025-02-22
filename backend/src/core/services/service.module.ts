@@ -3,9 +3,9 @@ import { UserService } from './user.service';
 import { PostgresUserRepository } from 'src/infrastructure/database/postgres/repositories/user.repository';
 import { ContactService } from './contact.service';
 import { PostgresContactRepository } from 'src/infrastructure/database/postgres/repositories/contact.repository';
-import { SearchService } from './search.service';
+// import { SearchService } from './search.service';
 import { PROVIDERS } from 'src/infrastructure/common/constants/provider.constant';
-import { PostgresRepository } from 'src/infrastructure/database/postgres/repositories/base.repository';
+// import { PostgresRepository } from 'src/infrastructure/database/postgres/repositories/base.repository';
 import { FolderService } from './folder.service';
 import { PostgresFolderRepository } from 'src/infrastructure/database/postgres/repositories/folder.repository';
 import { NotificationService } from './notification.service';
@@ -15,7 +15,7 @@ import { NotificationService } from './notification.service';
     NotificationService,
     FolderService,
     {
-      provide: 'FolderRepository',
+      provide: PROVIDERS.folderRepository,
       useClass: PostgresFolderRepository,
     },
     UserService,
@@ -28,16 +28,16 @@ import { NotificationService } from './notification.service';
       provide: PROVIDERS.contactRepository,
       useClass: PostgresContactRepository,
     },
-    SearchService,
-    {
-      provide: PROVIDERS.repository,
-      useClass: PostgresRepository,
-    },
+    // SearchService,
+    // {
+    //   provide: PROVIDERS.repository,
+    //   useClass: PostgresRepository,
+    // },
   ],
   exports: [
     UserService,
     ContactService,
-    SearchService,
+    // SearchService,
     FolderService,
     NotificationService,
   ],

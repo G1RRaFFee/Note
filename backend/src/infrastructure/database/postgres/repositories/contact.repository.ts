@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
 import { Contact } from 'src/core/entities/contact.entity';
-import { Repository } from 'src/core/repositories/repository/repository';
 import { PrismaService } from 'src/infrastructure/services/prisma/prisma.service';
 
 @Injectable()
-export class PostgresContactRepository implements Repository<Contact> {
+export class PostgresContactRepository {
   public constructor(private readonly prismaService: PrismaService) {}
 
   public async getAll(sort?: {
@@ -85,14 +84,7 @@ export class PostgresContactRepository implements Repository<Contact> {
     return await this.prismaService.contact.count();
   }
 
-  public async getAllPaginated(
-    page: number = 1,
-    perPage: number = 10,
-    sort?: {
-      field: keyof Contact;
-      orderBy: 'asc' | 'desc';
-    },
-  ) {
+  public async getAllContacts(page: number = 1, perPage: number = 10) {
     return await this.prismaService.contact.findMany({
       skip: (page - 1) * perPage,
       take: perPage,
@@ -102,9 +94,10 @@ export class PostgresContactRepository implements Repository<Contact> {
         lastName: true,
         middleName: true,
         about: true,
+        avatarUrl: true,
       },
       orderBy: {
-        [sort.field]: sort.orderBy,
+        lastName: 'asc',
       },
     });
   }
@@ -117,6 +110,7 @@ export class PostgresContactRepository implements Repository<Contact> {
         lastName: true,
         middleName: true,
         about: true,
+        avatarUrl: true,
       },
       where: {
         isPinned: true,

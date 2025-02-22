@@ -67,11 +67,9 @@ export default class ContactService {
     page: number,
     perPage: number,
     orderBy?: "asc" | "desc"
-  ): Promise<ContactDto.Response.Full.GetPaginatedContacts> {
+  ): Promise<ContactDto.Response.Full.GetAllContacts> {
     try {
-      const {
-        data,
-      }: AxiosResponse<ContactDto.Response.Full.GetPaginatedContacts> =
+      const { data }: AxiosResponse<ContactDto.Response.Full.GetAllContacts> =
         await AxiosInstance.get(API.contacts, {
           withCredentials: true,
           params: { page: page, per_page: perPage, order_by: orderBy },
@@ -105,6 +103,7 @@ export default class ContactService {
         await AxiosInstance.get(`${API.contacts}/${id}`, {
           withCredentials: true,
         });
+      console.log(data);
       return data;
     } catch (error) {
       if (error instanceof AxiosError) {

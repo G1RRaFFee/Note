@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 
 interface PaginatorProps {
-  children: ReactNode;
+  children: React.ReactNode;
   onLoadMore: () => void;
   hasMore: boolean;
 }
@@ -21,7 +21,7 @@ const Paginator = ({
       ([entry]) => {
         setIsIntersecting(entry.isIntersecting);
       },
-      { rootMargin: "100px" }
+      { threshold: 1.0 }
     );
 
     if (observer && observerRef.current) {
@@ -45,7 +45,11 @@ const Paginator = ({
     <div className="Paginator">
       {children}
       {hasMore && (
-        <div ref={observerRef} style={{ height: 1, backgroundColor: "pink" }} />
+        <div
+          ref={observerRef}
+          className="lastItem"
+          style={{ height: "10px", backgroundColor: "transparent" }}
+        />
       )}
     </div>
   );

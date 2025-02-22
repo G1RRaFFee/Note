@@ -20,21 +20,13 @@ export class ContactService {
     return await this.contactRepository.getPinnedContacts();
   }
 
-  public async getPaginatedContacts(
+  public async getAllContacts(
     page: number,
     perPage: number,
-    orderBy?: 'asc' | 'desc',
   ): Promise<ContactDto.Response.Basic.GetPaginatedContacts> {
     const totalContacts = await this.contactRepository.getTotalCounts();
     const totalPages = Math.ceil(totalContacts / perPage);
-    const contacts = await this.contactRepository.getAllPaginated(
-      page,
-      perPage,
-      {
-        field: 'lastName',
-        orderBy: orderBy,
-      },
-    );
+    const contacts = await this.contactRepository.getAllContacts(page, perPage);
 
     return {
       paginationDetails: {

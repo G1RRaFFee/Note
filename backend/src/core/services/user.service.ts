@@ -11,6 +11,15 @@ export class UserService {
     private readonly userRepository: UserRepository,
   ) {}
 
+  public async getUserByReservedFolder(reservedFolderId: number) {
+    const user =
+      await this.userRepository.getUserByReservedFolder(reservedFolderId);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
+  }
+
   public async findById(id: number): Promise<User | null> {
     const user = await this.userRepository.getUserById(id);
 

@@ -1,7 +1,16 @@
 import { Api } from "../api/api.type";
-import { Contact } from "./entity.type";
+import { PaginationDetails } from "../paginationDetails/entity.type";
 
 export namespace ContactDto {
+  export class Contact {
+    readonly id: number;
+    readonly firstName: string;
+    readonly lastName?: string;
+    readonly middleName?: string;
+    readonly avatarUrl?: string;
+    readonly about?: string;
+  }
+
   export namespace Request {
     export class Create {}
     export class Update {}
@@ -12,10 +21,10 @@ export namespace ContactDto {
     export namespace Full {
       export class SearchContacts extends Api {
         readonly data: {
-          contacts: {
+          contacts: Array<{
             item: Contact;
             refIndex: number;
-          }[];
+          }>;
         };
       }
 
@@ -23,21 +32,10 @@ export namespace ContactDto {
         readonly data: Contact | null;
       }
 
-      export class GetPaginatedContacts extends Api {
-        readonly data: {
-          paginationDetails: {
-            currentPage: number;
-            perPage: number;
-            totalContacts: number;
-            totalPages: number;
-          };
-          contacts: {
-            id: number;
-            firstName: string;
-            lastName?: string;
-            middleName?: string;
-            about?: string;
-          }[];
+      export class GetAllContacts extends Api {
+        data: {
+          paginationDetails: PaginationDetails;
+          contacts: Array<ContactDto.Contact>;
         };
       }
     }

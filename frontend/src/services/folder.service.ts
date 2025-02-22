@@ -1,11 +1,16 @@
 import AxiosInstance from "@/api/axios.config";
 import API from "@/constants/api.constant";
+import { FolderDto } from "@/types/folder/folder.type";
 import { AxiosError } from "axios";
 
 export class Folderservice {
   public static async getAllFolders() {
     try {
-      const response = await AxiosInstance.get(API.folders);
+      const response =
+        await AxiosInstance.get<FolderDto.Response.Full.getAllFolders>(
+          API.folders
+        );
+
       const { statusCode, message, data } = response.data;
       return {
         statusCode,
@@ -37,13 +42,16 @@ export class Folderservice {
     options?: { perPage?: number; page?: number }
   ) {
     try {
-      const response = await AxiosInstance.get(`${API.folders}/${folderId}`, {
-        params: {
-          per_page: options?.perPage,
-          page: options?.page,
-        },
-      });
-
+      const response =
+        await AxiosInstance.get<FolderDto.Response.Full.getAllContactsFromFolder>(
+          `${API.folders}/${folderId}`,
+          {
+            params: {
+              per_page: options?.perPage,
+              page: options?.page,
+            },
+          }
+        );
       const { statusCode, message, data } = response.data;
 
       return {

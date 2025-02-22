@@ -4,15 +4,15 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
 import { AuthModule } from './infrastructure/services/auth/auth.module';
-import { ContactController } from './infrastructure/controllers/contact/contact.controller';
+import { ContactController } from './infrastructure/controllers/contact.controller';
 import { ServiceModule } from './core/services/service.module';
-import { FileController } from './infrastructure/controllers/file/file.controller';
-import { SearchController } from './infrastructure/controllers/search/search.controller';
+import { FileController } from './infrastructure/controllers/file.controller';
+import { SearchController } from './infrastructure/controllers/search.controller';
 import { ContactService } from './core/services/contact.service';
 import { PROVIDERS } from './infrastructure/common/constants/provider.constant';
 import { PostgresContactRepository } from './infrastructure/database/postgres/repositories/contact.repository';
-import { FolderController } from './infrastructure/controllers/folder/folder.controller';
-import { NotificationController } from './infrastructure/controllers/notification/notification.controller';
+import { FolderController } from './infrastructure/controllers/folder.controller';
+import { NotificationController } from './infrastructure/controllers/notification.controller';
 
 @Module({
   imports: [

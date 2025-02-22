@@ -8,4 +8,5 @@ export interface UserRepository {
   createUser(creatUserDto: CreateUserDto): Promise<User>;
   updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User>;
   removeUserById(id: number): Promise<void>;
+  getUserByReservedFolder(reservedFolderId: number);
 }

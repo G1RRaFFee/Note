@@ -1,7 +1,57 @@
 .sideBar {
   display: flex;
   flex-direction: column;
-  width: 30%;
-  gap: 1rem;
-  padding: 1rem;
+  min-width: 25%;
+  gap: 0.5rem;
+  user-select: none;
+  border-right: rgba(117, 117, 117, 0.4) solid 1px;
+
+  .header {
+    padding: 0.5rem;
+  }
+
+  .divider {
+    color: #5a5a5a;
+    opacity: 0.15;
+    margin: 0 0.5rem;
+  }
+
+  .accordionItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.5rem;
+    background-color: transparent;
+    border: none;
+
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: "Inter";
+    color: #5a5a5a;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.item {
+  display: flex;
+  padding: 0.5rem;
+  color: #a5a5a5;
+  font-size: 0.875rem;
+  font-weight: 500;
+  &:hover {
+    background-color: #2c2c2e;
+  }
+}
+
+.activeItem {
+  display: flex;
+  padding: 0.5rem;
+  background-color: #2c2c2e;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 500;
 }

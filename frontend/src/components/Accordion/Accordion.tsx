@@ -21,6 +21,7 @@ interface AccordionItemProps {
   icon?: ReactNode;
   isOpen?: boolean;
   onToggle?: () => void;
+  headerClassName?: string;
 }
 
 export const Accordion = ({
@@ -61,10 +62,11 @@ export const AccordionItem = ({
   isOpen,
   icon,
   onToggle,
+  headerClassName,
 }: AccordionItemProps): ReactNode => {
   return (
     <div>
-      <button onClick={onToggle}>
+      <button className={headerClassName} onClick={onToggle}>
         <span>{title}</span>
         <span className={isOpen ? styles.rotateIcon : styles.defaultIcon}>
           {icon}

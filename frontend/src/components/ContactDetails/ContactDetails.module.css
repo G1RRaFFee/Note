@@ -1,0 +1,33 @@
+.article {
+  width: 100%;
+  height: 100%;
+  .header {
+    gap: 1rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .contactAvatar {
+      border-radius: 99px;
+    }
+    .title {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 2rem;
+      font-weight: 500;
+      font-family: "Inter";
+    }
+  }
+}
+
+.about {
+  color: #a5a5a5;
+  font-weight: 400;
+  font-size: 0.875rem;
+}
+.container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}

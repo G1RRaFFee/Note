@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Contact } from '@prisma/client';
 import { PrismaService } from 'src/infrastructure/services/prisma/prisma.service';
 
 @Injectable()
@@ -8,6 +7,15 @@ export class PostgresFolderRepository {
 
   public async getFolderById(id: number) {
     return await this.prismaService.folder.findFirst({ where: { id: id } });
+  }
+
+  public async getAllPinnedContactsFromFolder(folderId: number) {
+    return await this.prismaService.contact.findMany({
+      where: {
+        folderId: folderId,
+        isPinned: true,
+      },
+    });
   }
 
   public async getAllFolders() {
@@ -47,7 +55,7 @@ export class PostgresFolderRepository {
   }
 
   public async createFolder(name: string, isReserved: boolean) {
-    await this.prismaService.folder.create({
+    return await this.prismaService.folder.create({
       data: { name: name, isReserved: isReserved },
     });
   }

@@ -8,6 +8,7 @@ model Folder {
 
     isReserved Boolean   @default(false)
     contacts   Contact[]
+    User       User?     @relation("UserReservedFolder")
 
     @@map("folders")
 }

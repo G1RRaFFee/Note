@@ -1,21 +1,14 @@
-.events {
+.trash {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem;
   .icon {
-    color: #ff453a;
-    min-width: 20px;
+    color: #8e8e93;
   }
   .title {
     font-weight: 500;
     color: #a5a5a5;
-  }
-  .eventsCount {
-    color: #a5a5a5;
-    padding: 0 0.25rem;
-    border-radius: 2rem;
-    font-size: 14px;
   }
 
   &:hover {

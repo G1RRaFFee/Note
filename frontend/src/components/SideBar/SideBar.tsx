@@ -1,13 +1,19 @@
 "use client";
 
-import { ReactNode } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 
-import styles from "./SideBar.module.css";
-
-interface SideBarProps {
+interface SideBarProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
 
-export const SideBar = ({ children }: SideBarProps): ReactNode => {
-  return <aside className={styles.aside}>{children}</aside>;
+export const SideBar = ({
+  children,
+  className,
+  ...props
+}: SideBarProps): ReactNode => {
+  return (
+    <aside {...props} className={className}>
+      {children}
+    </aside>
+  );
 };

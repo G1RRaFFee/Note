@@ -6,7 +6,6 @@ import {
   ParseIntPipe,
   Query,
 } from '@nestjs/common';
-import { Contact } from 'src/core/entities/contact.entity';
 import { FolderService } from 'src/core/services/folder.service';
 
 @Controller('folders')
@@ -36,7 +35,6 @@ export class FolderController {
         page,
         perPage,
       );
-
     return {
       statusCode: HttpStatus.OK,
       message: 'Contacts from folder successfully received',

@@ -1,0 +1,52 @@
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  &:hover {
+    background-color: #313131;
+    cursor: pointer;
+  }
+}
+.pinIcon {
+  fill: #5a5a5a;
+  stroke: #5a5a5a;
+  rotate: 30deg;
+}
+.about {
+  font-size: 14px;
+  color: #5a5a5a;
+}
+
+.link {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+
+  justify-content: space-between;
+  .contactData {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+.activeLink {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: #313131;
+  justify-content: space-between;
+
+  .contactData {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+.contactAvatar {
+  border-radius: 99px;
+}

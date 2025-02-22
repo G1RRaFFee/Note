@@ -1,4 +1,4 @@
-export interface Contact {
+export class Contact {
   readonly id: number;
   readonly firstName: string;
   readonly lastName?: string;

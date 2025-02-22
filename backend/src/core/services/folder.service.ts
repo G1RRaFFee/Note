@@ -1,13 +1,17 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { PROVIDERS } from 'src/infrastructure/common/constants/provider.constant';
 import { PostgresContactRepository } from 'src/infrastructure/database/postgres/repositories/contact.repository';
 import { PostgresFolderRepository } from 'src/infrastructure/database/postgres/repositories/folder.repository';
+import { PostgresUserRepository } from 'src/infrastructure/database/postgres/repositories/user.repository';
 
 @Injectable()
 export class FolderService implements OnModuleInit {
   public constructor(
-    @Inject('ContactRepository')
+    @Inject(PROVIDERS.userRepository)
+    private readonly userRepository: PostgresUserRepository,
+    @Inject(PROVIDERS.contactRepository)
     private readonly contactRepository: PostgresContactRepository,
-    @Inject('FolderRepository')
+    @Inject(PROVIDERS.folderRepository)
     private readonly folderRepository: PostgresFolderRepository,
   ) {}
 
@@ -17,6 +21,10 @@ export class FolderService implements OnModuleInit {
 
   public async getAllFolders() {
     return await this.folderRepository.getAllFolders();
+  }
+
+  public getAllPinnedContactsFromFolder(folderId: number) {
+    return this.folderRepository.getAllPinnedContactsFromFolder(folderId);
   }
 
   public async getAllContactsFromFolder(
@@ -29,23 +37,45 @@ export class FolderService implements OnModuleInit {
     const totalPages = Math.ceil(totalContacts / perPage);
     const folder = await this.folderRepository.getFolderById(folderId);
 
+    const pinnedContacts = await this.getAllPinnedContactsFromFolder(folderId);
+
     if (folder.isReserved) {
-      return this.contactRepository.getAllPaginated(page, perPage);
+      const reservedFolder = await this.folderRepository.getReservedFolder();
+      const user = await this.userRepository.getUserByReservedFolder(
+        reservedFolder.id,
+      );
+      return {
+        user: user,
+        contacts: {
+          paginationDetails: {
+            currentPage: page,
+            perPage,
+            totalContacts,
+            totalPages,
+          },
+          data: await this.contactRepository.getAllContacts(page, perPage),
+        },
+        pinnedContacts: pinnedContacts,
+      };
     }
-    // TODO: Переписать получение всех пользователей
+
     const { contacts } = await this.folderRepository.getAllContactsFromFolder(
       folderId,
       page,
       perPage,
     );
+
     return {
-      paginationDetails: {
-        currentPage: page,
-        perPage,
-        totalContacts,
-        totalPages,
+      contacts: {
+        paginationDetails: {
+          currentPage: page,
+          perPage,
+          totalContacts,
+          totalPages,
+        },
+        data: contacts,
       },
-      contacts: contacts,
+      pinnedContacts: pinnedContacts,
     };
   }
 

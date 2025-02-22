@@ -11,9 +11,9 @@ import {
   UseGuards,
   ParseIntPipe,
 } from '@nestjs/common';
-import { AuthService } from '../../services/auth/auth.service';
-import { SignUpDto } from '../../../core/repositories/auth/dto/signup.dto';
-import { SignInDto } from '../../../core/repositories/auth/dto/signin.dto';
+import { AuthService } from '../services/auth/auth.service';
+import { SignUpDto } from '../../core/repositories/auth/dto/signup.dto';
+import { SignInDto } from '../../core/repositories/auth/dto/signin.dto';
 import { Response, Request } from 'express';
 import { GetUser } from 'src/infrastructure/common/decorators/getUser.decorator';
 import { AuthGuard } from 'src/infrastructure/common/guards/auth.guard';
