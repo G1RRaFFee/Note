@@ -10,8 +10,8 @@ export class Folderservice {
         await AxiosInstance.get<FolderDto.Response.Full.getAllFolders>(
           API.folders
         );
-
       const { statusCode, message, data } = response.data;
+
       return {
         statusCode,
         message,

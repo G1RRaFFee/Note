@@ -15,6 +15,7 @@ import { UserCard } from "@/components/Card/UserCard/UserCard";
 import { ContactsList } from "@/components/ContactsList/ContactsList";
 import { useContactsFromFolder } from "@/hooks/useContactsFromFolder";
 import { PinnedContactsList } from "@/components/PinnedContactsList/PinnedContactsList";
+import Link from "next/link";
 
 interface PageParams {
   folderId: string;
@@ -60,6 +61,13 @@ const FolderLayout = ({ params, children }: FolderPageProps): JSX.Element => {
             handleLoadMore={handleLoadMore}
           />
         </section>
+        <footer>
+          <Link
+            href={`/folders/${folderId}/contacts/create?folder_id=${folderId}`}
+          >
+            Создать
+          </Link>
+        </footer>
       </aside>
       <main className={styles.main}>{children}</main>
     </>

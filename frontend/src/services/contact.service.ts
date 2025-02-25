@@ -2,6 +2,7 @@ import AxiosInstance from "@/api/axios.config";
 import API from "@/constants/api.constant";
 import { ContactDto } from "@/types/contact/contact.type";
 import { AxiosError, AxiosResponse } from "axios";
+// TODO: "Переписать с использованием интерфейсов"
 
 export default class ContactService {
   public static async getPinnedContacts() {
@@ -125,15 +126,28 @@ export default class ContactService {
     }
   }
 
-  public static async createContact(data: FormData) {
-    if (!data) {
+  public static async createContact(formData: ContactDto.Request.Create) {
+    if (!formData) {
       throw Error("Нет данных для отправления");
     }
+
+    // TODO: Вынести в middleware
+    const normalizedData = Object.fromEntries(
+      Object.entries(formData).map(([key, value]) => [
+        key,
+        value === "" ? null : value,
+      ])
+    );
     try {
-      const response = await AxiosInstance.post("/contacts", data, {
+      const response = await AxiosInstance.post("/contacts", normalizedData, {
         withCredentials: true,
       });
-      return response;
+      const { statusCode, message, data } = response.data;
+      return {
+        statusCode,
+        message,
+        data,
+      };
     } catch (error) {
       console.log("Error fetching createContact:", error);
       throw error;

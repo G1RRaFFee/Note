@@ -58,35 +58,22 @@ export class ContactController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('avatarUrl', fileOptions))
+  // @UseInterceptors(FileInterceptor('avatarUrl', fileOptions))
   public async createContact(
-    @User() user,
-    @Body() createContactDto,
-    @UploadedFile() avatarUrl?: Express.Multer.File,
+    @User() user: { id: number; iat: number; exp: number },
+    @Body() createContactDto: ContactDto.Request.Create,
+    // @UploadedFile() avatarUrl?: Express.Multer.File,
   ) {
-    try {
-      createContactDto.userId = user.id;
+    createContactDto.userId = user.id;
+    // if (avatarUrl) {
+    //   createContactDto.avatarUrl = `uploads/${avatarUrl.filename}`;
+    // }
 
-      if (avatarUrl) {
-        createContactDto.avatarUrl = `uploads/${avatarUrl.filename}`;
-      }
-
-      const contact = await this.contactService.createContact(createContactDto);
-
-      return {
-        statusCode: HttpStatus.CREATED,
-        message: 'Contact successfully created.',
-        data: contact,
-      };
-    } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
-
-      throw new HttpException(
-        { message: 'Internal server error' },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const contact = await this.contactService.createContact(createContactDto);
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'Contact successfully created.',
+      data: contact,
+    };
   }
 }

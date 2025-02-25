@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { Contact } from 'src/core/entities/contact.entity';
+import { ContactDto } from 'src/core/repositories/contact/dto/contact.dto';
 import { PrismaService } from 'src/infrastructure/services/prisma/prisma.service';
 
 @Injectable()
@@ -73,11 +74,25 @@ export class PostgresContactRepository {
     return updatedContact;
   }
 
-  public async create(createContactDto): Promise<Contact> {
-    return;
-    // return await this.prismaService.contact.create({
-    //   data: createContactDto,
-    // });
+  public async create(
+    createContactDto: ContactDto.Request.Create,
+  ): Promise<Contact> {
+    return await this.prismaService.contact.create({
+      data: createContactDto,
+      select: {
+        id: true,
+        firstName: true,
+        middleName: true,
+        lastName: true,
+        email: true,
+        avatarUrl: true,
+        phone: true,
+        folderId: true,
+        birthday: true,
+        about: true,
+        isPinned: true,
+      },
+    });
   }
 
   public async getTotalCounts(): Promise<number> {

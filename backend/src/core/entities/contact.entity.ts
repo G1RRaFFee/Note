@@ -6,7 +6,6 @@ export class Contact {
     readonly middleName?: string,
     readonly email?: string,
     readonly folderId?: number,
-    readonly noteId?: number,
     readonly avatarUrl?: string,
     readonly phone?: string,
     readonly birthday?: string,

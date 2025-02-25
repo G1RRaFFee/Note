@@ -1,11 +1,11 @@
 "use client";
 
 import { Folderservice } from "@/services/folder.service";
-import { Folder } from "@/types/folder/entity.type";
+import { FolderDto } from "@/types/folder/folder.type";
 import { useEffect, useState } from "react";
 
 export const useFolders = () => {
-  const [folders, setFolders] = useState<Folder[]>([]);
+  const [folders, setFolders] = useState<FolderDto.Folder[]>([]);
 
   useEffect(() => {
     const fetchFolders = async () => {

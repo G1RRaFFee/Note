@@ -7,10 +7,9 @@ import { FoldersList } from "@/components/FoldersList/FoldersList";
 import { Notifications } from "@/components/Notifications/Notifications";
 import { Header } from "@/components/Header/Header";
 import { Accordion, AccordionItem } from "@/components/Accordion/Accordion";
-import { ChevronDown } from "lucide-react";
-
+import { ChevronDown, Plus } from "lucide-react";
+import Link from "next/link";
 import styles from "./layout.module.css";
-import { Trash } from "@/components/Trash/Trash";
 import { Settings } from "@/components/Settings/Settings";
 
 interface ProtectedlayoutProps {
@@ -43,9 +42,14 @@ const ProtectedLayout = ({ children }: ProtectedlayoutProps): ReactNode => {
         <hr className={styles.divider} />
         <Notifications />
         <hr className={styles.divider} />
-        <Trash />
-        <hr className={styles.divider} />
         <Settings />
+        <footer className={styles.footer}>
+          <div className={styles.toolbar}>
+            <Link href={"/folders/settings"}>
+              <Plus size={20} />
+            </Link>
+          </div>
+        </footer>
       </aside>
       {/* <Split
         sizes={[30, 70]}

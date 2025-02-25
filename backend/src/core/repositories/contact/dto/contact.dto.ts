@@ -3,7 +3,18 @@ import { Contact } from 'src/core/entities/contact.entity';
 
 export namespace ContactDto {
   export namespace Request {
-    export class Create {}
+    export class Create {
+      firstName: string;
+      folderId: number;
+      userId: number;
+      lastName?: string;
+      middleName?: string;
+      email?: string;
+      avatarUrl?: string;
+      phone?: string;
+      birthday?: string;
+      about?: string;
+    }
     export class Update {}
   }
   export namespace Response {

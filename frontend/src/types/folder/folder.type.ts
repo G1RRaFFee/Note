@@ -7,6 +7,7 @@ export namespace FolderDto {
   export class Folder {
     readonly id: number;
     readonly name: string;
+    readonly _count: { contacts: number };
   }
 
   export namespace Request {
@@ -19,7 +20,7 @@ export namespace FolderDto {
 
     export namespace Full {
       export class getAllFolders extends Api {
-        data: ReadonlyArray<FolderDto.Folder>;
+        data: Array<FolderDto.Folder>;
       }
 
       export class getAllContactsFromFolder extends Api {

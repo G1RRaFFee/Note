@@ -23,6 +23,11 @@ export class PostgresFolderRepository {
       select: {
         id: true,
         name: true,
+        _count: {
+          select: {
+            contacts: true,
+          },
+        },
       },
     });
   }

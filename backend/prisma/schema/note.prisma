@@ -1,6 +1,0 @@
-model Note {
-    id      Int      @id @default(autoincrement())
-    Contact Contact? @relation("ContactToNote")
-
-    @@map("notes")
-}

@@ -1,0 +1,77 @@
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 35%;
+  border-right: rgba(117, 117, 117, 0.4) solid 1px;
+  .header {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    .title {
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+    .description {
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: #5a5a5a;
+    }
+  }
+
+  .divider {
+    color: #5a5a5a;
+    opacity: 0.15;
+    margin: 0 0.5rem;
+  }
+}
+
+.list {
+  list-style-type: none;
+}
+.link {
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  &:hover {
+    background-color: #2c2c2e;
+  }
+}
+
+.activeLink {
+  padding: 0.5rem;
+  display: flex;
+  background-color: #2c2c2e;
+  align-items: center;
+  justify-content: space-between;
+}
+.wrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.folderName {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.contactsCount {
+  font-size: 0.8rem;
+  color: #5a5a5a;
+  font-weight: 400;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.trashIcon {
+  color: #5a5a5a;
+  transition: color 0.24s;
+
+  &:hover {
+    color: #ff453a;
+  }
+}

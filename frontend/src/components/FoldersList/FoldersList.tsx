@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { JSX, useState } from "react";
-
+import { FolderClosed } from "lucide-react";
 import { useFolders } from "@/hooks/folders.hook";
 
 import { List } from "../List/List";
-import { Folder } from "@/types/folder/entity.type";
+import { FolderDto } from "@/types/folder/folder.type";
 
 interface FoldersListProps {
   listClassName?: string;
@@ -21,15 +21,17 @@ export const FoldersList = ({
 }: FoldersListProps): JSX.Element => {
   const { folders } = useFolders();
 
-  const [selectedOption, setSelectedOption] = useState<Folder | null>(null);
+  const [selectedOption, setSelectedOption] = useState<FolderDto.Folder | null>(
+    null
+  );
 
-  const handleItemClick = (folder: Folder): void => {
+  const handleItemClick = (folder: FolderDto.Folder): void => {
     if (selectedOption === folder) return;
     setSelectedOption(folder);
   };
 
   return (
-    <List<Folder>
+    <List<FolderDto.Folder>
       className={listClassName}
       onItemClick={(folder) => handleItemClick(folder)}
       items={folders}
@@ -43,6 +45,7 @@ export const FoldersList = ({
           }
           href={`/folders/${folder.id}`}
         >
+          <FolderClosed size={20} style={{ color: "#5A5A5A" }} />
           {folder.name}
         </Link>
       )}

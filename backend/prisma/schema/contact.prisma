@@ -14,9 +14,6 @@ model Contact {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    note   Note? @relation("ContactToNote", fields: [noteId], references: [id])
-    noteId Int?  @unique
-
     userId Int
     user   User @relation(fields: [userId], references: [id])
 
