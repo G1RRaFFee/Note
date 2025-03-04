@@ -132,14 +132,14 @@ export default class ContactService {
     }
 
     // TODO: Вынести в middleware
-    const normalizedData = Object.fromEntries(
-      Object.entries(formData).map(([key, value]) => [
-        key,
-        value === "" ? null : value,
-      ])
-    );
+    // const normalizedData = Object.fromEntries(
+    //   Object.entries(formData).map(([key, value]) => [
+    //     key,
+    //     value === "" ? null : value,
+    //   ])
+    // );
     try {
-      const response = await AxiosInstance.post("/contacts", normalizedData, {
+      const response = await AxiosInstance.post("/contacts", formData, {
         withCredentials: true,
       });
       const { statusCode, message, data } = response.data;

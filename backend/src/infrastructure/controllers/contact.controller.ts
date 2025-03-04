@@ -2,78 +2,94 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
   HttpStatus,
   Param,
   ParseIntPipe,
   Post,
   Query,
-  UploadedFile,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/infrastructure/common/guards/auth.guard';
 import { ContactService } from 'src/core/services/contact.service';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { User } from 'src/infrastructure/common/decorators/extract.user';
 import { ContactDto } from 'src/core/repositories/contact/dto/contact.dto';
-import fileOptions from 'src/infrastructure/config/file.config';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { GetUser } from '../common/decorators/getUser.decorator';
+import { ContactMapper } from '../database/mappers/contact.mapper';
 
+@ApiTags('Contact')
+@ApiBearerAuth()
 @Controller('contacts')
 @UseGuards(AuthGuard)
 export class ContactController {
   public constructor(private readonly contactService: ContactService) {}
 
+  @ApiOperation({
+    summary: 'Get all contacts',
+    description: 'Getting all contacts, including pinned contacts and user',
+  })
+  @ApiBadRequestResponse()
+  @ApiOkResponse({
+    type: ContactDto.Response.Full.GetAllContacts,
+    description: 'The contacts has been successfully received.',
+  })
+  @ApiUnauthorizedResponse({ description: 'User is not authorized' })
   @Get()
   public async getAllContacts(
-    @Query('page', ParseIntPipe) page: number = 1,
-    @Query('per_page', ParseIntPipe) perPage: number = 10,
-  ): Promise<ContactDto.Response.Full.GetPaginatedContacts> {
-    const contacts = await this.contactService.getAllContacts(page, perPage);
+    @Query() query: ContactDto.Request.GetContactsQuery,
+  ): Promise<ContactDto.Response.Full.GetAllContacts> {
+    const contacts = await this.contactService.getAllContacts(
+      query.offset,
+      query.limit,
+    );
     return {
       statusCode: HttpStatus.OK,
-      message: 'Contacts successfully received',
+      message: 'OK',
       data: contacts,
     };
   }
 
   @Get('pinned')
-  public async getPinnedContacts() {
-    const pinntedContacts = await this.contactService.getPinnedContacts();
+  public async getPinnedContacts(): Promise<ContactDto.Response.Full.getPinnedContacts> {
     return {
       statusCode: HttpStatus.OK,
-      message: 'Pinned contacts successfully received',
-      data: pinntedContacts,
+      message: 'OK',
+      data: await this.contactService.getPinnedContacts(),
     };
   }
 
   @Get(':id')
-  public async getById(@Param('id', ParseIntPipe) id: number) {
-    const contact = await this.contactService.getContactbyId(id);
+  public async getById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ContactDto.Response.Full.GetContactById> {
     return {
       statusCode: HttpStatus.OK,
-      message: 'Contact successfully received',
-      data: contact,
+      message: 'OK',
+      data: await this.contactService.getContactbyId(id),
     };
   }
 
   @Post()
-  // @UseInterceptors(FileInterceptor('avatarUrl', fileOptions))
   public async createContact(
-    @User() user: { id: number; iat: number; exp: number },
+    @GetUser() user: { id: number },
     @Body() createContactDto: ContactDto.Request.Create,
-    // @UploadedFile() avatarUrl?: Express.Multer.File,
   ) {
-    createContactDto.userId = user.id;
-    // if (avatarUrl) {
-    //   createContactDto.avatarUrl = `uploads/${avatarUrl.filename}`;
-    // }
+    console.log(createContactDto);
+    const mappedContactDto = ContactMapper.toCreateContactDto(
+      user,
+      createContactDto,
+    );
 
-    const contact = await this.contactService.createContact(createContactDto);
     return {
       statusCode: HttpStatus.CREATED,
-      message: 'Contact successfully created.',
-      data: contact,
+      message: 'CREATED.',
+      data: await this.contactService.createContact(mappedContactDto),
     };
   }
 }

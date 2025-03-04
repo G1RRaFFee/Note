@@ -2,14 +2,6 @@
 
 import { JSX, ReactNode, use, useState } from "react";
 
-// import { Header } from "@/components/Header/Header";
-// import { Container } from "@/components/Container/Container";
-// import { Title } from "@/components/Title/Title";
-// import { Search } from "@/components/Search/Search";
-// import { Action } from "@/components/Action/Action";
-
-// import { PinnedContacts } from "@/components/PinnedContacts/PinnedContacts";
-
 import styles from "./layout.module.css";
 import { UserCard } from "@/components/Card/UserCard/UserCard";
 import { ContactsList } from "@/components/ContactsList/ContactsList";
@@ -44,22 +36,18 @@ const FolderLayout = ({ params, children }: FolderPageProps): JSX.Element => {
   };
 
   return (
-    <>
+    <main style={{ width: "100%", display: "flex" }}>
       <aside className={styles.sideBar}>
         <section className={styles.list}>
-          {/* <ContactsList> */}
-          <UserCard user={user} />
-          <PinnedContactsList pinnedContacts={pinnedContacts} />
-          {/* </ContactsList> */}
-
-          {/* <UserCard /> */}
-          {/* <PinnedContacts /> */}
           <ContactsList
             folderId={folderId}
             contacts={contacts}
             hasMore={hasMore}
             handleLoadMore={handleLoadMore}
-          />
+          >
+            <UserCard user={user} />
+            <PinnedContactsList pinnedContacts={pinnedContacts} />
+          </ContactsList>
         </section>
         <footer>
           <Link
@@ -69,8 +57,8 @@ const FolderLayout = ({ params, children }: FolderPageProps): JSX.Element => {
           </Link>
         </footer>
       </aside>
-      <main className={styles.main}>{children}</main>
-    </>
+      <div className={styles.main}>{children}</div>
+    </main>
   );
 };
 

@@ -16,22 +16,23 @@ export class ContactService {
   public async createContact(createContactDto) {
     return await this.contactRepository.create(createContactDto);
   }
+
   public async getPinnedContacts() {
     return await this.contactRepository.getPinnedContacts();
   }
 
   public async getAllContacts(
-    page: number,
-    perPage: number,
-  ): Promise<ContactDto.Response.Basic.GetPaginatedContacts> {
+    offset: number = 1,
+    limit: number = 20,
+  ): Promise<ContactDto.Response.Basic.GetAllContacts> {
     const totalContacts = await this.contactRepository.getTotalCounts();
-    const totalPages = Math.ceil(totalContacts / perPage);
-    const contacts = await this.contactRepository.getAllContacts(page, perPage);
+    const totalPages = Math.ceil(totalContacts / limit);
+    const contacts = await this.contactRepository.getAllContacts(offset, limit);
 
     return {
-      paginationDetails: {
-        currentPage: page,
-        perPage,
+      pagination: {
+        offset: offset,
+        limit,
         totalContacts,
         totalPages,
       },

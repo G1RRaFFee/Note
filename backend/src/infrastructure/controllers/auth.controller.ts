@@ -18,6 +18,8 @@ import { Response, Request } from 'express';
 import { GetUser } from 'src/infrastructure/common/decorators/getUser.decorator';
 import { AuthGuard } from 'src/infrastructure/common/guards/auth.guard';
 import { UserService } from 'src/core/services/user.service';
+import { RefreshTokenGuard } from '../common/guards/refreshToken.guard';
+import { THIRTY_DAYS } from '../common/constants/date.constant';
 
 @Controller('auth')
 export class AuthController {
@@ -69,22 +71,20 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @UseGuards(RefreshTokenGuard)
   public async refreshToken(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ) {
-    if (!request.cookies['refreshToken']) {
-      throw new UnauthorizedException('Refresh Token is missing');
-    }
     const { accessToken, refreshToken } = await this.authService.refreshTokens(
-      request.cookies['refreshToken'],
+      request.cookies.refreshToken,
     );
 
     response.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      maxAge: 7 * 30 * 24 * 60 * 60 * 1000,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: 'strict',
+      maxAge: THIRTY_DAYS,
     });
 
     return { accessToken };

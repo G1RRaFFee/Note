@@ -38,16 +38,9 @@ export class PostgresContactRepository {
       where: {
         id: id,
       },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        middleName: true,
-        email: true,
-        avatarUrl: true,
-        phone: true,
-        birthday: true,
-        about: true,
+      omit: {
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
@@ -79,18 +72,10 @@ export class PostgresContactRepository {
   ): Promise<Contact> {
     return await this.prismaService.contact.create({
       data: createContactDto,
-      select: {
-        id: true,
-        firstName: true,
-        middleName: true,
-        lastName: true,
-        email: true,
-        avatarUrl: true,
-        phone: true,
-        folderId: true,
-        birthday: true,
-        about: true,
-        isPinned: true,
+      omit: {
+        userId: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
@@ -99,7 +84,7 @@ export class PostgresContactRepository {
     return await this.prismaService.contact.count();
   }
 
-  public async getAllContacts(page: number = 1, perPage: number = 10) {
+  public async getAllContacts(page: number, perPage: number) {
     return await this.prismaService.contact.findMany({
       skip: (page - 1) * perPage,
       take: perPage,

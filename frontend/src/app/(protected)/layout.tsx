@@ -1,7 +1,6 @@
 "use client";
 
 import React, { ReactNode } from "react";
-// import Split from "react-split";
 import { Search } from "@/components/Search/Search";
 import { FoldersList } from "@/components/FoldersList/FoldersList";
 import { Notifications } from "@/components/Notifications/Notifications";
@@ -51,15 +50,7 @@ const ProtectedLayout = ({ children }: ProtectedlayoutProps): ReactNode => {
           </div>
         </footer>
       </aside>
-      {/* <Split
-        sizes={[30, 70]}
-        minSize={[300, 350]}
-        maxSize={[450, Infinity]}
-        gutterAlign="start"
-        className={styles.split}
-      > */}
       {children}
-      {/* </Split> */}
     </>
   );
 };

@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
@@ -13,6 +18,7 @@ import { PROVIDERS } from './infrastructure/common/constants/provider.constant';
 import { PostgresContactRepository } from './infrastructure/database/postgres/repositories/contact.repository';
 import { FolderController } from './infrastructure/controllers/folder.controller';
 import { NotificationController } from './infrastructure/controllers/notification.controller';
+import { NormalizeDataMiddleware } from './infrastructure/middlewares/normalizedData.middleware';
 
 @Module({
   imports: [
@@ -41,4 +47,10 @@ import { NotificationController } from './infrastructure/controllers/notificatio
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(NormalizeDataMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.POST });
+  }
+}

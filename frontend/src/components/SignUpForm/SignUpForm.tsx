@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ChangeEvent, FC, FormEvent, useState } from "react";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/stores/auth.store";
 
 import styles from "./SignUp.module.css";
 
